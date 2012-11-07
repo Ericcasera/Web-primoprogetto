@@ -18,7 +18,7 @@ public class HtmlManager {
            out.println("<html>");
            out.println("<head>");
            out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
-           out.println("<link href=\"Bootstrap/css/bootstrap.min.css\" rel=\"stylesheet\">");
+           out.println("<link href=\"Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
            out.println("<title>Login</title>");
            out.println("</head>");
            out.println("<body>");
