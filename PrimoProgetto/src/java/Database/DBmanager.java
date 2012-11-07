@@ -58,6 +58,7 @@ private transient Connection con;
                     x.setUsername(username);
                     x.setPassword(password);
                     x.setRole(rs.getInt("role"));
+                    rs.close(); 
                     return x;
                 }       
         } catch (Exception ex) {
@@ -65,7 +66,7 @@ private transient Connection con;
         }
         finally {
                 try{
-                   rs.close();               
+              
                    stm.close();   
                  }
                  catch (Exception ex) {

@@ -1,7 +1,7 @@
-Wed Nov 07 18:23:59 CET 2012 : Apache Derby Server di rete: 10.8.1.2 - (1095077) avviato e pronto ad accettare connessioni sulla porta 1527
+Wed Nov 07 20:15:31 CET 2012 : Apache Derby Server di rete: 10.8.1.2 - (1095077) avviato e pronto ad accettare connessioni sulla porta 1527
 ----------------------------------------------------------------
-Wed Nov 07 18:24:52 CET 2012:
-Avvio della versione di Derby The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): istanza a816c00e-013a-dbe6-6116-00002b62fa14
+Wed Nov 07 20:17:27 CET 2012:
+Avvio della versione di Derby The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): istanza a816c00e-013a-dc4c-7cb8-00002b62fa14
 su directory database C:\Users\Daniel\Documents\GitHub\Web\Database\Progetto  con caricatore classi sun.misc.Launcher$AppClassLoader@64601bb1 
 
 java.vendor=Sun Microsystems Inc.
@@ -10,8 +10,8 @@ user.dir=C:\Users\Daniel\Documents\GitHub\Web\Database\javadb
 derby.system.home=C:\Users\Daniel\Documents\GitHub\Web\Database
 Programma di caricamento classe database avviato - derby.database.classpath=''
 ----------------------------------------------------------------
-Wed Nov 07 18:35:45 CET 2012: Shutting down Derby engine
+Wed Nov 07 20:46:11 CET 2012: Shutting down Derby engine
 ----------------------------------------------------------------
-Wed Nov 07 18:35:45 CET 2012:
-Arresto istanza a816c00e-013a-dbe6-6116-00002b62fa14 con caricatore classi C:\Users\Daniel\Documents\GitHub\Web\Database\Progetto 
+Wed Nov 07 20:46:11 CET 2012:
+Arresto istanza a816c00e-013a-dc4c-7cb8-00002b62fa14 con caricatore classi C:\Users\Daniel\Documents\GitHub\Web\Database\Progetto 
 ----------------------------------------------------------------

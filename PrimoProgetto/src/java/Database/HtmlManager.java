@@ -60,7 +60,9 @@ public class HtmlManager {
            out.println("</body>");
            out.println("</html>");   
 
-          }  
+          }
+    
+    
     
     
 }
