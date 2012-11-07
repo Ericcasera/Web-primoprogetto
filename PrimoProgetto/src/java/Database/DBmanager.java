@@ -4,8 +4,11 @@
  */
 package Database;
 
+import Beans.User;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,5 +39,43 @@ private transient Connection con;
             catch (Exception ex){
             }
           } 
+    
+    
+    public User Autentication(String username , String password)
+        {
+            String query = "Select * from users where username = ? and password = ? ";
+            PreparedStatement stm = null ;
+            ResultSet rs = null;
+            
+            try {     
+            stm = con.prepareStatement(query);
+            stm.setString(1, username);
+            stm.setString(2, password);
+            rs = stm.executeQuery();
+            if(rs.next())
+                {
+                    User x = new User();
+                    x.setUsername(username);
+                    x.setPassword(password);
+                    x.setRole(rs.getInt("role"));
+                    return x;
+                }       
+            rs.close();
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+        }
+        finally {
+                try{
+                   rs.close();               
+                   stm.close();   
+                 }
+                 catch (Exception ex) {
+                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+                 }
+            }
+            
+        return null;
+     
+     }
     
 }

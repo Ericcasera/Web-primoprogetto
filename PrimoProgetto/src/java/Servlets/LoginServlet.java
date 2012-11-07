@@ -4,13 +4,19 @@
  */
 package Servlets;
 
+import Beans.User;
+import Database.DBmanager;
 import Database.HtmlManager;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -18,39 +24,38 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class LoginServlet extends HttpServlet {
     
-    private HtmlManager html;
+    private HtmlManager HtmlManager;
+    private DBmanager DbManager;
     
     @Override
     public void init() throws ServletException {
-           // this.manager = (DbManager)super.getServletContext().getAttribute("DbManager");
-            html = new HtmlManager(); //da fare get Servlet
+            this.DbManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
+            this.HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
         }        
     
-    
-
-    /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
- 
-        try {
-           
-           html.printLoginPage(out, "Errore"); 
-            
-        } finally {            
-            out.close();
-        }
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        
+                User tmp = null;  
+                
+                tmp = DbManager.Autentication(username, password);
+
+                if(tmp == null) {           
+                    response.setContentType("text/html;charset=UTF-8");
+                    PrintWriter out = response.getWriter();      
+                    HtmlManager.printLoginPage(out, "Errore di autenticazione , Username o Password errati");      
+                    out.close();        
+                }
+                else
+                {   
+                    HttpSession session = request.getSession(true);
+                    session.setAttribute("user", username);
+                    session.setAttribute("role", tmp.getRole());
+                    response.sendRedirect(request.getContextPath() + "/Product");
+                }       
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

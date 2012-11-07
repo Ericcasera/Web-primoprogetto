@@ -24,7 +24,7 @@ public class HtmlManager {
            out.println("<body>");
            out.println("    <div>");
            
-           out.println("        <form action=\"Login\" method=\"get\" class=\"form-horizontal\">");
+           out.println("        <form action=\"Login\" method=\"post\" class=\"form-horizontal\">");
            
            out.println("        <div class=\"control-group\">");
            out.println("            <label class=\"control-label\" for=\"username\">Username</label>");

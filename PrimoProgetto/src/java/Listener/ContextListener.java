@@ -5,6 +5,7 @@
 package Listener;
 
 import Database.DBmanager;
+import Database.HtmlManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
@@ -24,9 +25,9 @@ public class ContextListener implements ServletContextListener {
             String DBurl , DBdriver;
             DBurl = sce.getServletContext().getInitParameter("DBurl");
             DBdriver = sce.getServletContext().getInitParameter("DBdriver");
-            //DBmanager manager = new DBmanager(DBurl , DBdriver);
-            //sce.getServletContext().setAttribute("DbManager", manager);
-            //new HHTMLmanager
+            DBmanager manager = new DBmanager(DBurl , DBdriver);
+            sce.getServletContext().setAttribute("DbManager", manager);
+            sce.getServletContext().setAttribute("HtmlManager", new HtmlManager());
         } catch (Exception ex) {
             Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
         }     

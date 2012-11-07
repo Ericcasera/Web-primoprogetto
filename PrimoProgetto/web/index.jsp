@@ -14,7 +14,7 @@
     </head>
     <body>       
         <div>
-            <form action="Login" method="get" class="form-horizontal">
+            <form action="Login" method="post" class="form-horizontal">
                   <div class="control-group">
                       <label class="control-label" for="username">Username</label>
                          <div class="controls">

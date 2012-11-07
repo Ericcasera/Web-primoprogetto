@@ -4,6 +4,22 @@
         <description>ServletContextListener</description>
         <listener-class>Listener.ContextListener</listener-class>
     </listener>
+    <context-param>
+        <param-name>
+           DBurl 
+        </param-name>
+        <param-value>
+            jdbc:derby://localhost:1527/Progetto;user=database;password=database
+        </param-value>
+    </context-param>   
+    <context-param>
+        <param-name>
+           DBdriver 
+        </param-name>
+        <param-value>
+            org.apache.derby.jdbc.ClientDriver  
+        </param-value>
+    </context-param>   
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>Servlets.LoginServlet</servlet-class>
