@@ -1,7 +1,7 @@
-Wed Nov 07 16:16:23 CET 2012 : Apache Derby Server di rete: 10.8.1.2 - (1095077) avviato e pronto ad accettare connessioni sulla porta 1527
+Wed Nov 07 18:23:59 CET 2012 : Apache Derby Server di rete: 10.8.1.2 - (1095077) avviato e pronto ad accettare connessioni sulla porta 1527
 ----------------------------------------------------------------
-Wed Nov 07 16:19:33 CET 2012:
-Avvio della versione di Derby The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): istanza a816c00e-013a-db71-8d77-00002b62fa14
+Wed Nov 07 18:24:52 CET 2012:
+Avvio della versione di Derby The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): istanza a816c00e-013a-dbe6-6116-00002b62fa14
 su directory database C:\Users\Daniel\Documents\GitHub\Web\Database\Progetto  con caricatore classi sun.misc.Launcher$AppClassLoader@64601bb1 
 
 java.vendor=Sun Microsystems Inc.

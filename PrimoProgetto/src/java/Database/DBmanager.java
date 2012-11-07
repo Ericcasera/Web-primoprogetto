@@ -60,7 +60,6 @@ private transient Connection con;
                     x.setRole(rs.getInt("role"));
                     return x;
                 }       
-            rs.close();
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
         }
