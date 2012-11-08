@@ -4,7 +4,9 @@
  */
 package Filters;
 
+import Database.HtmlManager;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -21,8 +23,7 @@ import javax.servlet.http.HttpSession;
  * @author Daniel
  */
 public class BuyerFilter implements Filter {
-    
-    private FilterConfig filterConfig = null;    
+
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -34,8 +35,9 @@ public class BuyerFilter implements Filter {
         
         if(session == null || session.getAttribute("role") == null)
         {
-            request.getRequestDispatcher("ErrorPage.html").forward(req, res);
-            //Htmlmanager con messaggio "devi loggarti per potere entrare qui , sarai ridirezionato al login
+             res.setContentType("text/html;charset=UTF-8");
+             PrintWriter out = response.getWriter();   
+             HtmlManager.printErrorPage(out,"Index.jsp" ,req.getContextPath());
         }
         else
         {
@@ -43,14 +45,16 @@ public class BuyerFilter implements Filter {
             int x = Integer.parseInt(role);
             if(x != 1)
             {
-            request.getRequestDispatcher("ErrorPage.html").forward(req, res);
-             //Htmlmanager con messaggio "sei autenticato come seller:per potere entrare qui dei essere un buyer, sarai ridirezionato alla home dei seller
+             res.setContentType("text/html;charset=UTF-8");
+             PrintWriter out = response.getWriter();   
+             HtmlManager.printErrorPage(out,"Seller/SellerHome.html " ,req.getContextPath());
             }
             else {
                 chain.doFilter(request, response);
             }      
         }}
-
+        
+    
     @Override
     public void destroy() {
         
@@ -58,7 +62,6 @@ public class BuyerFilter implements Filter {
    
     @Override
     public void init(FilterConfig filterConfig) {        
-        this.filterConfig = filterConfig;
     }
 
 }

@@ -4,10 +4,9 @@
  */
 package Filters;
 
+import Database.HtmlManager;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -36,8 +35,9 @@ public class SellerFilter implements Filter {
         
         if(session == null || session.getAttribute("role") == null)
         {
-            request.getRequestDispatcher("ErrorPage.html").forward(req, res);
-            //Htmlmanager con messaggio "devi loggarti per potere entrare qui , sarai ridirezionato al login
+             res.setContentType("text/html;charset=UTF-8");
+             PrintWriter out = response.getWriter();   
+             HtmlManager.printErrorPage(out,"Index.jsp"  ,req.getContextPath());
         }
         else
         {
@@ -45,8 +45,9 @@ public class SellerFilter implements Filter {
             int x = Integer.parseInt(role);
             if(x != 2)
             {
-            request.getRequestDispatcher("ErrorPage.html").forward(req, res);
-             //Htmlmanager con messaggio "sei autenticato come seller:per potere entrare qui dei essere un buyer, sarai ridirezionato alla home dei seller
+             res.setContentType("text/html;charset=UTF-8");
+             PrintWriter out = response.getWriter();   
+             HtmlManager.printErrorPage(out,"Buyer/BuyerHome.html" , req.getContextPath());
             }
             else {
                 chain.doFilter(request, response);

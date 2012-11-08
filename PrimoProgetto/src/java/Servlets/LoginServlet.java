@@ -32,22 +32,7 @@ public class LoginServlet extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        HttpSession session = null;
-        session = request.getSession(false);
-        
-        if(session.getAttribute("role") != null)
-            {
-                int x = Integer.parseInt(session.getAttribute("role").toString());
-                    if(x == 1) {
-                    response.sendRedirect(request.getContextPath() + "/Buyer/BuyerHome.html");
-                }
-                    else {
-                    response.sendRedirect(request.getContextPath() + "/Seller/SellerHome.html");
-                }
-              return;
-            }
-              
+
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
@@ -55,24 +40,25 @@ public class LoginServlet extends HttpServlet {
                 
                 tmp = DbManager.Autentication(username, password);
 
-                if(tmp == null) {           
+                if(tmp == null) { //Errore non sei nel database          
                     response.setContentType("text/html;charset=UTF-8");
                     PrintWriter out = response.getWriter();      
                     HtmlManager.printLoginPage(out, "Errore di autenticazione , Username o Password errati");      
                     out.close();
-                }
+                }    
                 else
-                {   
-                    session = request.getSession(true);
+                {   //Login accettato , creo la session
+                    HttpSession session = request.getSession(true);
                     session.setAttribute("user", username);
                     session.setAttribute("role", tmp.getRole());
                     
                     if(tmp.getRole() == 1) {
                         response.sendRedirect(request.getContextPath() + "/Buyer/BuyerHome.html");
-                }
+                    }
                     else {
                         response.sendRedirect(request.getContextPath() + "/Seller/SellerHome.html");
-                }}             
+                    }
+                }             
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

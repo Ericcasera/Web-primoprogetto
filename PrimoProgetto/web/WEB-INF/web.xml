@@ -8,6 +8,18 @@
         <filter-name>SellerFilter</filter-name>
         <filter-class>Filters.SellerFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>Filters.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <servlet-name>LoginServlet</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/index.jsp</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>BuyerFilter</filter-name>
         <url-pattern>/Buyer/*</url-pattern>
