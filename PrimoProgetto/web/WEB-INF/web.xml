@@ -37,7 +37,7 @@
            DBurl 
         </param-name>
         <param-value>
-            jdbc:derby://localhost:1527/Progetto;user=database;password=database
+            jdbc:derby://localhost:1527/PrimoProgetto;user=database;password=database
         </param-value>
     </context-param>
     <context-param>
