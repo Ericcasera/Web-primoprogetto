@@ -47,7 +47,7 @@ public class BuyerFilter implements Filter {
             {
              res.setContentType("text/html;charset=UTF-8");
              PrintWriter out = response.getWriter();   
-             HtmlManager.printErrorPage(out,"Seller/SellerHome.html " ,req.getContextPath());
+             HtmlManager.printErrorPage(out,"Seller/SellerHome " ,req.getContextPath());
             }
             else {
                 chain.doFilter(request, response);

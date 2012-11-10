@@ -40,7 +40,10 @@ public class LoginServlet extends HttpServlet {
         if(uri.equals("/PrimoProgetto/Logout")) //Controllo se sto facendo logout
         {
                     HttpSession session = request.getSession(false);
-                    session.invalidate();
+                    if(session != null)
+                    {
+                        session.invalidate();
+                    }
                     request.setAttribute("message", "Session : " + session.getId());
                     request.getRequestDispatcher("/Login").forward(request, response);
                     return;
@@ -76,10 +79,10 @@ public class LoginServlet extends HttpServlet {
                     session.setAttribute("role", tmp.getRole());
                     
                     if(tmp.getRole() == 1) {
-                        response.sendRedirect(request.getContextPath() + "/Buyer/BuyerHome.html");
+                        response.sendRedirect(request.getContextPath() + "/Buyer/BuyerHome");
                     }
                     else {
-                        response.sendRedirect(request.getContextPath() + "/Seller/SellerHome.html");
+                        response.sendRedirect(request.getContextPath() + "/Seller/SellerHome");
                     }
                 }             
     }

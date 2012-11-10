@@ -47,10 +47,10 @@ public class LoginFilter implements Filter {
             String role = session.getAttribute("role").toString();
             int x = Integer.parseInt(role);           
             if(x == 1) {
-                res.sendRedirect(req.getContextPath() + "/Buyer/BuyerHome.html");
+                res.sendRedirect(req.getContextPath() + "/Buyer/BuyerHome");
             }
             else {
-                res.sendRedirect(req.getContextPath() + "/Seller/SellerHome.html");
+                res.sendRedirect(req.getContextPath() + "/Seller/SellerHome");
             }  
         }     
         }
