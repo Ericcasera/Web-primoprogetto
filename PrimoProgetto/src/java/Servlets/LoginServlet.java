@@ -32,18 +32,41 @@ public class LoginServlet extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
+        String uri = request.getRequestURI();
+        
+        
+        //Dopo il logout richiamo questa servlet che stampa a video "logout effettuato"
+        if(uri.equals("/PrimoProgetto/Logout")) //Controllo se sto facendo logout
+        {
+                    HttpSession session = request.getSession(false);
+                    session.invalidate();
+                    request.setAttribute("message", "Session : " + session.getId());
+                    request.getRequestDispatcher("/Login").forward(request, response);
+                    return;
+        }
+        
+        if(request.getAttribute("message")!= null) //Caso che arrivo dopo il logout
+        {
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();      
+        HtmlManager.printLoginPage(out, (String)request.getAttribute("message") , 0);      
+        out.close(); 
+        return;
+        } 
+        
+        //Caso che arrivo avento premuto il tasto login
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
                 User tmp = null;  
                 
                 tmp = DbManager.Autentication(username, password);
-
-                if(tmp == null) { //Errore non sei nel database          
+                //Caso autenticazione fallita
+                if(tmp == null) {        
                     response.setContentType("text/html;charset=UTF-8");
                     PrintWriter out = response.getWriter();      
-                    HtmlManager.printLoginPage(out, "Errore di autenticazione , Username o Password errati");      
+                    HtmlManager.printLoginPage(out, "Errore di autenticazione , Username o Password errati" , -1);      
                     out.close();
                 }    
                 else

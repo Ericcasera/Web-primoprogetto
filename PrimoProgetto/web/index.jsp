@@ -10,10 +10,15 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="Bootstrap/css/bootstrap.css" rel="stylesheet">
+        <link href="Bootstrap/css/grafica.css" rel="stylesheet">
         <title>Login</title>
     </head>
     <body>       
-        <div>
+        <div class="login well">
+            <div class="login-title" >
+                <h4>Benvenuti a "vendo piante" , prego loggarsi</h4>
+                <br>
+            </div>
             <form action="Login" method="post" class="form-horizontal">
                   <div class="control-group">
                       <label class="control-label" for="username">Username</label>

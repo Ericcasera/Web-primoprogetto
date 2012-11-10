@@ -4,7 +4,9 @@
  */
 package Filters;
 
+import Database.HtmlManager;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -41,9 +43,9 @@ public class LoginFilter implements Filter {
             chain.doFilter(request, response);
         }
         else
-        {
+        {             
             String role = session.getAttribute("role").toString();
-            int x = Integer.parseInt(role);
+            int x = Integer.parseInt(role);           
             if(x == 1) {
                 res.sendRedirect(req.getContextPath() + "/Buyer/BuyerHome.html");
             }
