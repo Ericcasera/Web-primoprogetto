@@ -4,8 +4,8 @@
  */
 package Listener;
 
-import Database.DBmanager;
-import Database.HtmlManager;
+import Managers.DBmanager;
+import Managers.HtmlManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;

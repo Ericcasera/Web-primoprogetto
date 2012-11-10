@@ -23,13 +23,13 @@
                   <div class="control-group">
                       <label class="control-label" for="username">Username</label>
                          <div class="controls">
-                             <input type="text" id="username" name="username">
+                             <input class="input-large" placeholder="Username" type="text" id="username" name="username">
                          </div>
                   </div>
                   <div class="control-group">
                       <label class="control-label" for="password">Password</label>
                          <div class="controls">
-                             <input type="password" id="password" name="password">
+                             <input class="input-large" placeholder="Password" type="password" id="password" name="password">
                          </div>
                   </div>
                   <div class="control-group">

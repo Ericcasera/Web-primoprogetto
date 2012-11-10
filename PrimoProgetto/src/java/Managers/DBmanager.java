@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Database;
+package Managers;
 
 import Beans.User;
 import java.sql.Connection;

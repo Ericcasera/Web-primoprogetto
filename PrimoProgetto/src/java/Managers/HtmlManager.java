@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Database;
+package Managers;
 
 import java.io.PrintWriter;
 
@@ -18,8 +18,10 @@ public class HtmlManager {
            out.println("<html>");
            out.println("<head>");
            out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
-           out.println("<link href=\"Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
-           out.println("<link href=\"Bootstrap/css/grafica.css\" rel=\"stylesheet\">");
+           out.println("<link  href=\"Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
+           out.println("<link  href=\"Bootstrap/css/grafica.css\" rel=\"stylesheet\">");
+           out.println("<script src=\"Bootstrap/js/jquery-1.8.2.js\"></script>");
+           out.println("<script src=\"Bootstrap/js/bootstrap.min.js\"></script>");
            out.println("<title>Login</title>");
            out.println("</head>");
            out.println("<body>");
@@ -31,13 +33,13 @@ public class HtmlManager {
            out.println("        <div class=\"control-group\">");
            out.println("            <label class=\"control-label\" for=\"username\">Username</label>");
            out.println("                <div class=\"controls\">");
-           out.println("                <input type=\"text\" id=\"username\" name=\"username\">");
+           out.println("                <input class=\"input-large\" placeholder=\"Username\" type=\"text\" id=\"username\" name=\"username\">");
            out.println("                </div>");
            out.println("         </div>");  
            out.println("        <div class=\"control-group\">");
            out.println("            <label class=\"control-label\" for=\"password\">Password</label>");
            out.println("                <div class=\"controls\">");
-           out.println("                <input type=\"password\" id=\"password\" name=\"password\">");
+           out.println("                <input class=\"input-large\" placeholder=\"Password\" type=\"password\" id=\"password\" name=\"password\">");
            out.println("                </div>");
            out.println("            </div>");   
            out.println("        <div class=\"control-group\">");
@@ -52,18 +54,19 @@ public class HtmlManager {
                 out.println("<div align=\"center\" class=\"control-group\">");
                 if(type == -1)
                 {
-                out.println("   <div class=\"alert alert-error\">");
+                out.println("   <div class=\"alert alert-error fade in\">");
+                out.println("   <a class=\"close\" data-dismiss=\"alert\" href=\"#\">&times;</a>");
                 out.println("   <p algin=\"center\" class=\"text-error\"> " + message + "</p>  ");
                 out.println("   </div>");
                 }
                 else
                 {
-                out.println("   <div class=\"alert alert-success\">");
+                out.println("   <div class=\"alert alert-success fade in\">");
+                out.println("   <a class=\"close\" data-dismiss=\"alert\" href=\"#\">&times;</a>");
                 out.println("   <p algin=\"center\" class=\"text-success\"> " + message + "</p>  ");
                 out.println("   </div>");
                 }     
                 out.println("</div>");     
-
              }  
 
            out.println("    </form>");

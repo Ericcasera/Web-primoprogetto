@@ -4,7 +4,7 @@
  */
 package Filters;
 
-import Database.HtmlManager;
+import Managers.HtmlManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.Filter;

@@ -4,9 +4,8 @@
  */
 package Servlets;
 
-import Beans.User;
-import Database.DBmanager;
-import Database.HtmlManager;
+import Managers.DBmanager;
+import Managers.HtmlManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
