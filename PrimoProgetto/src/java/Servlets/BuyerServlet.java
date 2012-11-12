@@ -44,8 +44,9 @@ public class BuyerServlet extends HttpServlet {
             out.println("<title>Servlet BuyerServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Benevenuto in buyer : " + (String) session.getAttribute("user"));
-            out.println("<a href=\"/PrimoProgetto/Logout\" > Logout </a>");
+            out.println("<h1>Benevenuto in buyer : " + (String) session.getAttribute("user") );
+            out.println("<br><h1>Il mio path è : " + request.getContextPath());
+            out.println("<br><a href=\"/PrimoProgetto/Logout\" > Logout </a>");
             out.println("</body>");
             out.println("</html>");
         } finally {            

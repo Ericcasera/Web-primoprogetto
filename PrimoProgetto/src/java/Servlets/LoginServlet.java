@@ -34,10 +34,11 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         
         String uri = request.getRequestURI();
+        String contextPath = request.getContextPath();
         
         
         //Dopo il logout richiamo questa servlet che stampa a video "logout effettuato"
-        if(uri.equals("/PrimoProgetto/Logout")) //Controllo se sto facendo logout
+        if(uri.equals(contextPath + "/Logout")) //Controllo se sto facendo logout
         {
                     HttpSession session = request.getSession(false);
                     if(session != null)
@@ -79,10 +80,10 @@ public class LoginServlet extends HttpServlet {
                     session.setAttribute("role", tmp.getRole());
                     
                     if(tmp.getRole() == 1) {
-                        response.sendRedirect(request.getContextPath() + "/Buyer/BuyerHome");
+                        response.sendRedirect(contextPath + "/Buyer/BuyerHome");
                     }
                     else {
-                        response.sendRedirect(request.getContextPath() + "/Seller/SellerHome");
+                        response.sendRedirect(contextPath + "/Seller/SellerHome");
                     }
                 }             
     }

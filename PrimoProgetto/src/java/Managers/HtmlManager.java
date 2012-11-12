@@ -82,9 +82,8 @@ public class HtmlManager {
     out.println("<html>");
     out.println("<head>");
     out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");     
-    out.println("<link href=\"../Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
+    out.println("<link href=\""+redirectURL+"/Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
     out.println("<title>ErrorPage</title>");
-    out.println("<head>");
     out.println("    <script type=\"text/javascript\">");
     out.println("       var ss = 5;");
     out.println("           function countdown() {");
