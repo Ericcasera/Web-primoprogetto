@@ -1,0 +1,56 @@
+create table users 
+(
+ID INTEGER primary key NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+username varchar(255) unique not null , 
+password varchar(255) not null , 
+role int not null,
+check (role> 0 and role < 3)
+);
+
+create table category 
+(
+ID INTEGER NOT NULL primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+name varchar(255) unique not null , 
+description varchar(255), 
+image_url varchar(255)
+);
+
+create table products 
+(
+ID INTEGER NOT NULL primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+name varchar(255) unique not null , 
+description varchar(255), 
+image_url varchar(255),
+category int not null,
+foreign key (category) references category(id)
+);
+
+
+create table sell_order 
+(
+ID INTEGER NOT NULL primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+seller_id int unique not null , 
+product_id int unique not null , 
+um varchar(20) ,
+quantity  int not null , 
+price_per_unit int not null, 
+date_order date ,
+foreign key (seller_id) references users(id) ,
+foreign key (product_id) references products(id)
+);
+
+
+create table buy_order 
+(
+ID INTEGER NOT NULL primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+seller_id int unique not null , 
+product_id int unique not null , 
+um varchar(20) ,
+quantity  int not null , 
+price_per_unit int not null, 
+total_price int not null,
+date_order date ,
+receipt_url varchar(255) ,
+foreign key (seller_id) references users(id) ,
+foreign key (product_id) references products(id)
+);
