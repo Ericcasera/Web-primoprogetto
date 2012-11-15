@@ -4,13 +4,16 @@
  */
 package Managers;
 
+import Beans.Category;
 import Beans.User;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletContext;
 
 /**
  *
@@ -77,5 +80,45 @@ private transient Connection con;
         return null;
      
      }
+    
+    public ArrayList queryCategory(ServletContext context){
+    
+            String query = "Select * from category";
+            PreparedStatement stm = null ;
+            ResultSet rs = null;
+            ArrayList lista = new ArrayList(40);
+            Category tmp;
+            
+            try {     
+            stm = con.prepareStatement(query);
+            rs = stm.executeQuery();
+            
+            while(rs.next())
+                {
+                    tmp = new Category();
+                    tmp.setId(rs.getInt("ID"));
+                    tmp.setName(rs.getString("NAME"));
+                    tmp.setDescription(rs.getString("DESCRIPTION"));
+                    tmp.setImageURL(context.getRealPath("Images/" + (rs.getString("IMAGE_URL"))));
+                    lista.add(tmp);
+                } 
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+        }
+        finally {
+                try{
+                   rs.close();            
+                   stm.close();   
+                 }
+                 catch (Exception ex) {
+                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+                 }
+            }
+            
+        return lista;
+    }
+    
+    
+    
        
 }

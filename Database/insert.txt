@@ -10,58 +10,7 @@ values ('Frutta' , 'I frutti più succosi' , 'frutta.jpg');
 insert into CATEGORY (name , description , image_url)
 values ('Attrezzi' , 'Gli attrezzi più mortali!!!' , 'attrezzi.gif');
 
-insert into Products (name , description , image_url , category)
-values ('Mela verde' , 'mele molto sugose' , 'mela.jpg' , (Select id from category where name = 'Frutta'));   
-
-insert into Products (name , description , image_url , category)
-values ('Mela rossa' , 'rossa come il sangue' , 'mela.jpg' , (Select id from category where name = 'Frutta'));
-
-insert into Products (name , description , image_url , category)
-values ('Pera' , 'perone' , 'mela.jpg' , (Select id from category where name = 'Frutta'));
-
-insert into Products (name , description , image_url , category)
-values ('Ananas' , 'tonda' , 'ananas.jpg' , (Select id from category where name = 'Frutta'));
-
-insert into Products (name , description , image_url , category)
-values ('Banana' , 'mele da toni' , 'mela.jpg' , (Select id from category where name = 'Frutta'));
-
-
-insert into Products (name , description , image_url , category)
-values ('Pomodoro' , 'sanguineo' , 'pomodoro.jpg' , (Select id from category where name = 'Verdura'));   
-
-insert into Products (name , description , image_url , category)
-values ('Zucchina' , 'lunga' , 'mela.jpg' , (Select id from category where name = 'Verdura'));
-
-insert into Products (name , description , image_url , category)
-values ('Carota' , 'arancione' , 'carota.jpg' , (Select id from category where name = 'Verdura'));
-
-insert into Products (name , description , image_url , category)
-values ('Patata' , 'gialla' , 'patata.jpg' , (Select id from category where name = 'Verdura'));
-
-insert into Products (name , description , image_url , category)
-values ('Insalata' , ' molta' , 'mela.jpg' , (Select id from category where name = 'Verdura'));
-
-
-insert into Products (name , description , image_url , category)
-values ('Trattore lamborghini XYZ12' , 'ultra power (150TW)' , 'lamborghini.jpg' , (Select id from category where name = 'Trattori'));   
-
-insert into Products (name , description , image_url , category)
-values ('Trattore lamborghini XZZ12' , 'fantastic (10Tn/sec)' , 'lamborghini.jpg' , (Select id from category where name = 'Trattori'));
-
-insert into Products (name , description , image_url , category)
-values ('Trattore goldone' , 'sempre protetto' , 'goldoni.jpg' , (Select id from category where name = 'Trattori'));
-
-
-
-
-insert into Products (name , description , image_url , category)
-values ('Zappa' , 'scava ogni cosa' , 'zappa.jpg' , (Select id from category where name = 'Attrezzi'));   
-
-insert into Products (name , description , image_url , category)
-values ('Plasma rifle' , 'morte ai vivi' , 'lamborghini.jpg' , (Select id from category where name = 'Attrezzi'));
-
-insert into Products (name , description , image_url , category)
-values ('Badile' , '10tn/s' , 'badile.jpg' , (Select id from category where name = 'Attrezzi'));
+-------------------------------------------------------
 
 insert into users (username , password , role) values
 ('buyer1' , 'buyer1' , 1);
@@ -75,34 +24,114 @@ insert into users (username , password , role) values
 insert into users (username , password , role) values
 ('seller1' , 'seller1' , 2);
 
-insert into sell_order (seller_id , product_id , um , quantity , price_per_unit , date_order)
-values ((Select id from users where username='seller1') , (Select id from products where name='Zucchina') , 'kg' , 20 , 150 , '2011-03-12')	Mon Nov 12 19:25:36 CET 2012
-insert into sell_order (seller_id , product_id , um , quantity , price_per_unit , date_order)
-values ((Select id from users where username='seller1') , (Select id from products where name='Badile') , 'Unità' , 2 , 25 , '2011-03-12')	Mon Nov 12 19:25:36 CET 2012
-insert into sell_order (seller_id , product_id , um , quantity , price_per_unit , date_order)
-values ((Select id from users where username='seller1') , (Select id from products where name='Plasma rifle') , 'Unità' , 6 , 2000 , '2011-03-12')	Mon Nov 12 19:25:36 CET 2012
-insert into sell_order (seller_id , product_id , um , quantity , price_per_unit , date_order)
-values ((Select id from users where username='seller1') , (Select id from products where name='Trattore lamborghini XYZ12') , 'Unità' , 1 , 67000 , '2011-03-12')	Mon Nov 12 19:25:36 CET 2012
-insert into sell_order (seller_id , product_id , um , quantity , price_per_unit , date_order)
-values ((Select id from users where username='seller1') , (Select id from products where name='Ananas') , 'kg' , 1000 , 2 , '2011-03-12')	Mon Nov 12 19:25:36 CET 2012
-insert into sell_order (seller_id , product_id , um , quantity , price_per_unit ,  date_order)
-values ((Select id from users where username='seller1') , (Select id from products where name='Pera') , 'kg' , 1000 , 100 ,'2011-03-12')	Mon Nov 12 19:25:36 CET 2012
+------------------------------------------------------
 
-insert into buy_order (seller_id , product_id , um , quantity , price_per_unit , total_price , date_order , receipt_url)
-values ((Select id from users where username='buyer1') , (Select id from products where name='Zucchina') , 'kg' , 20 , 150 , 3000 , '2011-03-12' , 'nd')	Mon Nov 12 19:19:56 CET 2012
-insert into buy_order (seller_id , product_id , um , quantity , price_per_unit , total_price , date_order , receipt_url)
-values ((Select id from users where username='buyer1') , (Select id from products where name='Badile') , 'Unità' , 2 , 25 , 50 , '2011-03-12' , 'nd')	Mon Nov 12 19:19:56 CET 2012
-insert into buy_order (seller_id , product_id , um , quantity , price_per_unit , total_price , date_order , receipt_url)
-values ((Select id from users where username='buyer1') , (Select id from products where name='Plasma rifle') , 'Unità' , 6 , 2000 , 12000 , '2010-03-12' , 'nd')	Mon Nov 12 19:19:56 CET 2012
-insert into buy_order (seller_id , product_id , um , quantity , price_per_unit , total_price , date_order , receipt_url)
-values ((Select id from users where username='buyer1') , (Select id from products where name='Trattore lamborghini XYZ12') , 'Unità' , 1 , 67000 , 67000 , '2012-03-12' , 'nd')	Mon Nov 12 19:19:56 CET 2012
-insert into buy_order (seller_id , product_id , um , quantity , price_per_unit , total_price , date_order , receipt_url)
-values ((Select id from users where username='buyer1') , (Select id from products where name='Ananas') , 'kg' , 1000 , 2 , 2000, '2011-04-12' , 'nd')	Mon Nov 12 19:19:56 CET 2012
-insert into buy_order (seller_id , product_id , um , quantity , price_per_unit , total_price , date_order , receipt_url)
-values ((Select id from users where username='buyer1') , (Select id from products where name='Pera') , 'kg' , 1000 , 100 , 100000 , '2011-03-12' , 'nd')	Mon Nov 12 19:19:56 CET 2012
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller1'),(Select id from category where name = 'Frutta'),  
+'Mela verde' , 'mele molto sugose' , 'mela.jpg' , 'kg' , 2500 , 2 , '2011-03-12');
+
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller1'),(Select id from category where name = 'Frutta'),  
+'Mela rossa' , 'rossa come il sangue' , 'mela.jpg' , 'kg' , 1000 , 5 , '2012-03-12');
+
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller1'),(Select id from category where name = 'Frutta'),  
+'Pera' , 'perone' , 'mela.jpg' , 'kg' , 4000 , 1 , '2011-06-12');
+
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller2'),(Select id from category where name = 'Frutta'),  
+'Ananas' , 'tonda' , 'ananas.jpg' , 'kg' , 3000 , 12 , '2011-05-12');
+
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller2'),(Select id from category where name = 'Frutta'),  
+'Banana' , 'mele da toni' , 'mela.jpg' , 'kg' , 8000 , 3 , '2011-09-12');
 
 
 
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller1'),(Select id from category where name = 'Verdura'),  
+'Pomodoro' , 'sanguineo' , 'pomodoro.jpg', 'kg' , 1500 , 60 , '2011-03-12');
+
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller1'),(Select id from category where name = 'Verdura'),  
+'Zucchina' , 'lunga' , 'mela.jpg' , 'kg' , 2500 , 10 , '2011-11-12');
+
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller1'),(Select id from category where name = 'Verdura'),  
+'Carota' , 'arancione' , 'carota.jpg' , 'kg' , 3000 , 2 , '2011-03-12');
+
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller2'),(Select id from category where name = 'Verdura'),  
+'Patata' , 'gialla' , 'patata.jpg' ,  'kg' , 200 , 4 , '2011-03-12');
+
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller2'),(Select id from category where name = 'Verdura'),  
+'Insalata' , ' molta' , 'mela.jpg' , 'kg' , 3500 , 15 , '2011-03-12');
 
 
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller1'),(Select id from category where name = 'Trattori'),  
+'Trattore lamborghini XYZ12' , 'ultra power (150TW)' , 'lamborghini.jpg' , 'Unità' , 20 , 56000 , '2011-03-12');
 
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller1'),(Select id from category where name = 'Trattori'),  
+'Trattore lamborghini XZZ12' , 'fantastic (10Tn/sec)' , 'lamborghini.jpg' , 'Unità' , 10 , 70900 , '2011-03-12');
+
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller2'),(Select id from category where name = 'Trattori'),  
+'Trattore goldone' , 'sempre protetto' , 'goldoni.jpg' , 'Unità' , 15 , 36000 , '2012-03-12');
+
+
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller1'),(Select id from category where name = 'Attrezzi'),  
+'Zappa' , 'scava ogni cosa' , 'zappa.jpg' , 'Unità' , 600 , 28 , '2012-03-12');
+
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller2'),(Select id from category where name = 'Attrezzi'),  
+'Plasma rifle' , 'morte ai vivi' , 'lamborghini.jpg' , 'Unità' , 18 , 680 , '2001-03-12');
+
+insert into products (seller_id , category_id , name , description , image_url , um , quantity , price , date_order)
+values ((Select ID from users where username = 'seller2'),(Select id from category where name = 'Attrezzi'),  
+'Badile' , '10tn/s' , 'badile.jpg' , 'Unità' , 200 , 180 , '2011-09-12');
+
+------------------------------------
+
+insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order) values
+((Select ID from users where username='buyer1') , (Select id from products where name='Mela verde') 
+, 'kg' , 200 , 2 , 400 , '1012-10-10');
+
+insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order) values
+((Select ID from users where username='buyer1') , (Select id from products where name='Pera') 
+, 'kg' , 650 , 1 , 650 , '1012-10-10');
+
+insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order) values
+((Select ID from users where username='buyer2') , (Select id from products where name='Pomodoro') 
+, 'kg' , 800 , 60 , 4800 , '1012-10-10');
+
+insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order) values
+((Select ID from users where username='buyer2') , (Select id from products where name='Carota') 
+, 'kg' , 20 , 2 , 40 , '1012-10-10');
+
+insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order) values
+((Select ID from users where username='buyer2') , (Select id from products where name='Insalata') 
+, 'kg' , 2500 , 15 , 3750 , '1012-10-10');
+
+insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order) values
+((Select ID from users where username='buyer1') , (Select id from products where name='Trattore lamborghini XYZ12') 
+, 'Unità' , 2 , 56000 , 56000 , '1012-10-10');
+
+insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order) values
+((Select ID from users where username='buyer2') , (Select id from products where name='Trattore goldone') 
+, 'Unità' , 1 , 36000 , 36000 , '1012-10-10');
+
+insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order) values
+((Select ID from users where username='buyer1') , (Select id from products where name='Plasma rifle') 
+, 'Unità' , 5 , 680 , 3400 , '1012-10-10');
+
+insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order) values
+((Select ID from users where username='buyer1') , (Select id from products where name='Badile') 
+, 'Unità' , 2 , 180 , 360 , '1012-10-10');
+
+insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order) values
+((Select ID from users where username='buyer2') , (Select id from products where name='Badile') 
+, 'Unità' , 4 , 180 , 720 , '1012-10-10');
