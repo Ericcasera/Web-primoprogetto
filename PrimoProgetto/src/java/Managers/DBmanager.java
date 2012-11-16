@@ -5,6 +5,8 @@
 package Managers;
 
 import Beans.Category;
+import Beans.Order;
+import Beans.Product;
 import Beans.User;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -60,6 +62,7 @@ private transient Connection con;
                     User x = new User();
                     x.setUsername(username);
                     x.setPassword(password);
+                    x.setId(rs.getInt("id"));
                     x.setRole(rs.getInt("role"));
                     rs.close(); 
                     return x;
@@ -68,8 +71,7 @@ private transient Connection con;
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
         }
         finally {
-                try{
-              
+                try{     
                    stm.close();   
                  }
                  catch (Exception ex) {
@@ -101,13 +103,13 @@ private transient Connection con;
                     tmp.setDescription(rs.getString("DESCRIPTION"));
                     tmp.setImageURL(context.getRealPath("Images/" + (rs.getString("IMAGE_URL"))));
                     lista.add(tmp);
-                } 
+                }
+            rs.close(); 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
         }
         finally {
-                try{
-                   rs.close();            
+                try{          
                    stm.close();   
                  }
                  catch (Exception ex) {
@@ -117,6 +119,97 @@ private transient Connection con;
             
         return lista;
     }
+    
+        public ArrayList queryProducts(ServletContext context , int category_id){
+    
+            String query = "Select * from products where category_id = ?";
+            PreparedStatement stm = null ;
+            ResultSet rs = null;
+            ArrayList lista = new ArrayList(40);
+            Product tmp;
+            
+            try {        
+            stm = con.prepareStatement(query);
+            stm.setInt(1, category_id);
+            rs = stm.executeQuery();
+            
+            while(rs.next())
+                {
+                    tmp = new Product();
+                    tmp.setId(rs.getInt("id"));
+                    tmp.setSeller_id(rs.getInt("seller_id"));
+                    tmp.setCategory_id(category_id);
+                    tmp.setPrice(rs.getInt("price"));
+                    tmp.setQuantity(rs.getInt("quantity"));
+                    tmp.setName(rs.getString("name"));
+                    tmp.setDescription(rs.getString("description"));
+                    tmp.setImage_url(rs.getString("image_url"));
+                    tmp.setUm(rs.getString("um"));
+                    tmp.setDate_order(rs.getDate("date_order"));
+                    lista.add(tmp);
+                    
+                } 
+                   rs.close(); 
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+        }
+        finally {
+                try{       
+                   stm.close();   
+                 }
+                 catch (Exception ex) {
+                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+                 }
+            }
+            
+        return lista;
+    }
+        
+        
+    public ArrayList queryBuyerOrders(ServletContext context , int buyer_id){
+    
+            String query = "Select o.id as id , o.UM as um , o.QUANTITY as quantity , o.PRICE as price , o.TOTAL_PRICE as total_price , o.DATE_ORDER as order_date , o.RECEIPT_URL as receipt_url, NAME as name " 
+                    + "from orders o join products p on o.PRODUCT_ID = p.ID " 
+                    + "where o.BUYER_ID = ?";
+            PreparedStatement stm = null ;
+            ResultSet rs = null;
+            ArrayList lista = new ArrayList(40);
+            Order tmp;
+            
+            try {        
+            stm = con.prepareStatement(query);
+            stm.setInt(1, buyer_id);
+            rs = stm.executeQuery();
+            
+            while(rs.next())
+                {
+                    tmp = new Order();
+                    tmp.setName(rs.getString("name"));
+                    tmp.setOrder_date(rs.getDate("order_date"));
+                    tmp.setOrder_id(rs.getInt("id"));
+                    tmp.setPrice(rs.getInt("price"));
+                    tmp.setQuantity(rs.getInt("quantity"));
+                    tmp.setTotal_price(rs.getInt("total_price"));
+                    tmp.setUm(rs.getString("um"));
+                    lista.add(tmp);  
+                } 
+                   rs.close(); 
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+        }
+        finally {
+                try{       
+                   stm.close();   
+                 }
+                 catch (Exception ex) {
+                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+                 }
+            }
+            
+        return lista;
+    }
+    
+    
     
     
     

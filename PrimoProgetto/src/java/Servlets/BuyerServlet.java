@@ -5,6 +5,8 @@
 package Servlets;
 
 import Beans.Category;
+import Beans.Order;
+import Beans.Product;
 import Managers.DBmanager;
 import Managers.HtmlManager;
 import java.io.IOException;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpSession;
 /**
  *
  * @author Daniel
+ * Servlet per la gestione di BuyerHome , Prodcuts , Orders
  */
 public class BuyerServlet extends HttpServlet {
 
@@ -39,6 +42,11 @@ public class BuyerServlet extends HttpServlet {
         
         HttpSession session = request.getSession(false);
         ArrayList lista = DbManager.queryCategory(super.getServletContext());
+        String uri = request.getRequestURI();
+        String contextPath = request.getContextPath();  
+        
+        if(uri.equals(contextPath + "/Buyer/BuyerHome"))
+        {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
@@ -46,19 +54,20 @@ public class BuyerServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet BuyerServlet</title>");            
+            out.println("<title>BuyerHome</title>");            
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Benevenuto in buyer : " + (String) session.getAttribute("user") );
             out.println("<br><h1>Il mio path è : " + request.getContextPath());
-            out.println("<br><a href=\"/PrimoProgetto/Logout\" > Logout </a>"); 
+            out.println("<br><a href=\"/PrimoProgetto/Logout\" > Logout </a>");
+            out.println("<br><a href=\"/PrimoProgetto/Buyer/BuyerOldOrder\" > I miei ordini </a>"); 
             out.println("<table><tr><td>ID</td><td>Nome</td><td>Descrizione</td><td>Image_ULR</td></tr>");
             Iterator iter = lista.iterator();
             while(iter.hasNext())
             {
             Category tmp = (Category) iter.next();
             out.println("<tr><td>" + tmp.getId() + "</td>");
-            out.println("<td>" + tmp.getName() + "</td>");
+            out.println("<td><a href=\""+ contextPath +"/Buyer/Products?category="+ tmp.getId()+"\">" + tmp.getName() + " </a> </td>");
             out.println("<td>" + tmp.getDescription() + "</td>");
             out.println("<td><img src=\"http://localhost:8084/PrimoProgetto/Images/mela.jpg\" width=\"200px\" height=\"200px\"></td></tr>");
             }
@@ -68,6 +77,109 @@ public class BuyerServlet extends HttpServlet {
         } finally {            
             out.close();
         }
+        }
+        else if(uri.equals(contextPath + "/Buyer/Products"))
+        {
+            String error = null;       
+            ArrayList products_list = null;
+            if(request.getParameter("category") == null)
+            {
+            error = "Categoria non trovata";
+            }
+            else
+            {
+                try{
+              products_list = DbManager.queryProducts(this.getServletContext(), Integer.parseInt(request.getParameter("category")));
+                }
+                catch (NumberFormatException e){
+                error = e.toString();
+                }
+            }
+                   
+            
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();  
+            try{
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>ProductPage</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            if(error != null)
+            {
+            out.println("<h1>Ce stato un errore :" + error + "<h1><br>");
+            }
+            else if(products_list.isEmpty())
+            {
+            out.println("<h1>Non ci sono elementi in questa categoria<h1><br>");
+            }
+            else
+            {
+            out.println("<table><tr><td>ID</td><td>Nome</td><td>Descrizione</td><td>Um</td><td>Price</td><td>Quantity</td><td>Date</td></tr>");           
+            Iterator iter = products_list.iterator();
+            while(iter.hasNext())
+            {
+            Product tmp = (Product) iter.next();
+            out.println("<tr><td>" + tmp.getId() + "</td>");
+            out.println("<td>"+tmp.getName() + "</td>");
+            out.println("<td>" + tmp.getDescription() + "</td>");
+            out.println("<td>" + tmp.getUm() + "</td>");
+            out.println("<td>" + tmp.getPrice() + "</td>");
+            out.println("<td>" + tmp.getQuantity() + "</td>");
+            out.println("<td>" + tmp.getDate_order().toString() + "</td></tr>");
+            }
+            out.println("</table>"); 
+            }        
+            out.println("</body>");
+            out.println("</html>");
+        } finally {            
+            out.close();
+        }
+        }
+        else
+        {     
+            ArrayList order_list = null;
+            String id = session.getAttribute("user_id").toString();
+            int user_id = Integer.parseInt(id);
+            order_list = DbManager.queryBuyerOrders(this.getServletContext(), user_id);
+            
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();  
+            try{
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>ProductPage</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            if(order_list.isEmpty())
+            {
+            out.println("<h1>Non ci sono elementi in questa categoria<h1><br>");
+            }
+            else
+            {
+            out.println("<table><tr><td>ID</td><td>Nome</td><td>prezzo</td><td>Um</td><td>quantita</td><td>prezzo totale</td><td>Data ordine</td></tr>");           
+            Iterator iter = order_list.iterator();
+            while(iter.hasNext())
+            {
+            Order tmp = (Order) iter.next();
+            out.println("<tr><td>" + tmp.getOrder_id() + "</td>");
+            out.println("<td>"+tmp.getName() + "</td>");
+            out.println("<td>" + tmp.getPrice() + "</td>");
+            out.println("<td>" + tmp.getUm() + "</td>");
+            out.println("<td>" + tmp.getQuantity() + "</td>");
+            out.println("<td>" + tmp.getTotal_price() + "</td>");
+            out.println("<td>" + tmp.getOrder_date() + "</td></tr>");
+            }
+            out.println("</table>"); 
+            }        
+            out.println("</body>");
+            out.println("</html>");
+        } finally {            
+            out.close();
+        }  }    
+        
+        
+              
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

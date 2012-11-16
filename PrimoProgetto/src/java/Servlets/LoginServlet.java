@@ -77,6 +77,7 @@ public class LoginServlet extends HttpServlet {
                 {   //Login accettato , creo la session
                     HttpSession session = request.getSession(true);
                     session.setAttribute("user", username);
+                    session.setAttribute("user_id", tmp.getId());
                     session.setAttribute("role", tmp.getRole());
                     
                     if(tmp.getRole() == 1) {

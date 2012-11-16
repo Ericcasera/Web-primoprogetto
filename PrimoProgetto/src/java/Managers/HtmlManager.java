@@ -5,6 +5,7 @@
 package Managers;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
  *
@@ -106,6 +107,22 @@ public class HtmlManager {
     out.println("</html>");
 
     }
+    
+    public void printBuyerHomePage(ArrayList category_list , String username)
+    {
+    
+    
+    
+    }
+    
+    public void printBuyerProdcutPage(ArrayList category_list ,ArrayList product_list ,String username , String message , int type)
+    {
+    //type = 1 per messaggio postitivo (acquisto eseguito con successo)
+    //type = -1 per messaggio negativo (categoria non trovata , acquisto non eseguito)
+    
+    }
+    
+    
     
     
     

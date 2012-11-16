@@ -11,8 +11,16 @@ package Beans;
 public class User {
     
     private String username , password;
-    private int role;
+    private int role , id;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+ 
     public String getUsername() {
         return username;
     }
