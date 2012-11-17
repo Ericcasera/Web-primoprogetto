@@ -15,7 +15,7 @@ public class HtmlManager {
     
     public void printLoginPage(PrintWriter out , String message , int type)
           {
-              
+           out.println("<!DOCTYPE HTML>");   
            out.println("<html>");
            out.println("<head>");
            out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
@@ -79,7 +79,7 @@ public class HtmlManager {
     
     static public void printErrorPage(PrintWriter out, String message , String redirectURL) //String message
     {
-        
+    out.println("<!DOCTYPE HTML>");       
     out.println("<html>");
     out.println("<head>");
     out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");     
@@ -115,10 +115,16 @@ public class HtmlManager {
     
     }
     
-    public void printBuyerProdcutPage(ArrayList category_list ,ArrayList product_list ,String username , String message , int type)
+    public void printBuyerProdcutsPage(ArrayList category_list , ArrayList products_list ,String username , String message , int type)
     {
     //type = 1 per messaggio postitivo (acquisto eseguito con successo)
     //type = -1 per messaggio negativo (categoria non trovata , acquisto non eseguito)
+    
+    }
+    
+    public void printBuyerOrdersPage(ArrayList category_list , ArrayList orders_list , String username)
+    {
+
     
     }
     

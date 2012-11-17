@@ -60,6 +60,10 @@
         <servlet-name>SellerServlet</servlet-name>
         <servlet-class>Servlets.SellerServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BuyerBuyOrder</servlet-name>
+        <servlet-class>Servlets.BuyerBuyOrder</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -70,11 +74,27 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BuyerServlet</servlet-name>
-        <url-pattern>/Buyer/*</url-pattern>
+        <url-pattern>/Buyer/BuyerHome</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BuyerServlet</servlet-name>
+        <url-pattern>/Buyer/Products</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BuyerServlet</servlet-name>
+        <url-pattern>/Buyer/Orders</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SellerServlet</servlet-name>
         <url-pattern>/Seller/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BuyerBuyOrder</servlet-name>
+        <url-pattern>/Buyer/BuyRequest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BuyerBuyOrder</servlet-name>
+        <url-pattern>/Buyer/BuyConfirm</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

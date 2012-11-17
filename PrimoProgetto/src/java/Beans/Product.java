@@ -12,18 +12,42 @@ import java.sql.Date;
  */
 public class Product {
     
-    private int seller_id , category_id , id , quantity , price;
-    private String name , description , image_url , um;
-    private Date date_order;
+    private int category_id , product_id , quantity , price;
+    private String product_name , description , image_url , um , seller_name;
+    private Date order_date;
 
-    public int getSeller_id() {
-        return seller_id;
+    public int getProduct_id() {
+        return product_id;
     }
 
-    public void setSeller_id(int seller_id) {
-        this.seller_id = seller_id;
+    public void setProduct_id(int product_id) {
+        this.product_id = product_id;
     }
 
+    public String getProduct_name() {
+        return product_name;
+    }
+
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
+    }
+
+    public String getSeller_name() {
+        return seller_name;
+    }
+
+    public void setSeller_name(String seller_name) {
+        this.seller_name = seller_name;
+    }
+
+    public Date getOrder_date() {
+        return order_date;
+    }
+
+    public void setOrder_date(Date order_date) {
+        this.order_date = order_date;
+    }
+ 
     public int getCategory_id() {
         return category_id;
     }
@@ -31,15 +55,7 @@ public class Product {
     public void setCategory_id(int category_id) {
         this.category_id = category_id;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    
     public int getQuantity() {
         return quantity;
     }
@@ -54,14 +70,6 @@ public class Product {
 
     public void setPrice(int price) {
         this.price = price;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
@@ -87,14 +95,5 @@ public class Product {
     public void setUm(String um) {
         this.um = um;
     }
-
-    public Date getDate_order() {
-        return date_order;
-    }
-
-    public void setDate_order(Date date_order) {
-        this.date_order = date_order;
-    }
-
     
 }

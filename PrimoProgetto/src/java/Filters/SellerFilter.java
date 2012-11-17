@@ -38,6 +38,7 @@ public class SellerFilter implements Filter {
              res.setContentType("text/html;charset=UTF-8");
              PrintWriter out = response.getWriter();   
              HtmlManager.printErrorPage(out,"Index.jsp"  ,req.getContextPath());
+             out.close();
         }
         else
         {
@@ -48,6 +49,7 @@ public class SellerFilter implements Filter {
              res.setContentType("text/html;charset=UTF-8");
              PrintWriter out = response.getWriter();   
              HtmlManager.printErrorPage(out,"Buyer/BuyerHome" , req.getContextPath());
+             out.close();
             }
             else {
                 chain.doFilter(request, response);

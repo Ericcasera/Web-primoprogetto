@@ -22,28 +22,31 @@ import javax.servlet.http.HttpSession;
 /**
  *
  * @author Daniel
- * Servlet per la gestione di BuyerHome , Prodcuts , Orders
+ * Servlet per la gestione di BuyerHome , Products , Orders
  */
 public class BuyerServlet extends HttpServlet {
 
     private HtmlManager HtmlManager;
     private DBmanager DbManager;
+    private String contextPath;
     
     @Override
     public void init() throws ServletException {
             this.DbManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
             this.HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
+            this.contextPath = this.getServletContext().getContextPath();
+            /*La query categoria si puo mettere qua (dato che non cambia mai) oppure fare un meccanismo ci chasing che
+            * tenga conto delle modifiche oppure fare un metodo (tipo un url speciale) che aggiorna le categorie
+            */
         }        
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {  
         
-        
-        
+  
         HttpSession session = request.getSession(false);
-        ArrayList lista = DbManager.queryCategory(super.getServletContext());
+        ArrayList lista = DbManager.queryCategory(this.getServletContext());
         String uri = request.getRequestURI();
-        String contextPath = request.getContextPath();  
         
         if(uri.equals(contextPath + "/Buyer/BuyerHome"))
         {
@@ -54,13 +57,13 @@ public class BuyerServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>BuyerHome</title>");            
+            out.println("<title>BuyerHome</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Benevenuto in buyer : " + (String) session.getAttribute("user") );
             out.println("<br><h1>Il mio path è : " + request.getContextPath());
             out.println("<br><a href=\"/PrimoProgetto/Logout\" > Logout </a>");
-            out.println("<br><a href=\"/PrimoProgetto/Buyer/BuyerOldOrder\" > I miei ordini </a>"); 
+            out.println("<br><a href=\"/PrimoProgetto/Buyer/Orders\" > I miei ordini </a>"); 
             out.println("<table><tr><td>ID</td><td>Nome</td><td>Descrizione</td><td>Image_ULR</td></tr>");
             Iterator iter = lista.iterator();
             while(iter.hasNext())
@@ -69,7 +72,7 @@ public class BuyerServlet extends HttpServlet {
             out.println("<tr><td>" + tmp.getId() + "</td>");
             out.println("<td><a href=\""+ contextPath +"/Buyer/Products?category="+ tmp.getId()+"\">" + tmp.getName() + " </a> </td>");
             out.println("<td>" + tmp.getDescription() + "</td>");
-            out.println("<td><img src=\"http://localhost:8084/PrimoProgetto/Images/mela.jpg\" width=\"200px\" height=\"200px\"></td></tr>");
+            out.println("<td><img src=\""+tmp.getImageURL() +"\" width=\"200px\" height=\"200px\"></td></tr>");
             }
             out.println("</table>");
             out.println("</body>");
@@ -89,7 +92,7 @@ public class BuyerServlet extends HttpServlet {
             else
             {
                 try{
-              products_list = DbManager.queryProducts(this.getServletContext(), Integer.parseInt(request.getParameter("category")));
+              products_list = DbManager.queryProductsList(this.getServletContext(), Integer.parseInt(request.getParameter("category")));
                 }
                 catch (NumberFormatException e){
                 error = e.toString();
@@ -115,18 +118,16 @@ public class BuyerServlet extends HttpServlet {
             }
             else
             {
-            out.println("<table><tr><td>ID</td><td>Nome</td><td>Descrizione</td><td>Um</td><td>Price</td><td>Quantity</td><td>Date</td></tr>");           
+            out.println("<table><tr><td>Nome</td><td>Descrizione</td><td>Um</td><td>Price</td><td>Quantity</td></tr>");           
             Iterator iter = products_list.iterator();
             while(iter.hasNext())
             {
             Product tmp = (Product) iter.next();
-            out.println("<tr><td>" + tmp.getId() + "</td>");
-            out.println("<td>"+tmp.getName() + "</td>");
-            out.println("<td>" + tmp.getDescription() + "</td>");
-            out.println("<td>" + tmp.getUm() + "</td>");
-            out.println("<td>" + tmp.getPrice() + "</td>");
-            out.println("<td>" + tmp.getQuantity() + "</td>");
-            out.println("<td>" + tmp.getDate_order().toString() + "</td></tr>");
+            out.println("<tr><td><a href=\"BuyRequest?ID="+ tmp.getProduct_id() +"\">"+ tmp.getProduct_name()+"</td>");
+            out.println("<td>" +     tmp.getDescription() + "</td>");
+            out.println("<td>" +     tmp.getUm() + "</td>");
+            out.println("<td>" +     tmp.getPrice() + "</td>");
+            out.println("<td>" +     tmp.getQuantity() + "</td></tr>");
             }
             out.println("</table>"); 
             }        
@@ -163,7 +164,7 @@ public class BuyerServlet extends HttpServlet {
             {
             Order tmp = (Order) iter.next();
             out.println("<tr><td>" + tmp.getOrder_id() + "</td>");
-            out.println("<td>"+tmp.getName() + "</td>");
+            out.println("<td>"+ tmp.getProduct_name() + "</td>");
             out.println("<td>" + tmp.getPrice() + "</td>");
             out.println("<td>" + tmp.getUm() + "</td>");
             out.println("<td>" + tmp.getQuantity() + "</td>");

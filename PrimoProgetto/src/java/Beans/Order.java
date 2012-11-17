@@ -13,8 +13,32 @@ import java.sql.Date;
 public class Order {
     
     private int order_id , product_id , quantity , price , total_price;
-    private String um , name , receipt_url ;
+    private String um , product_name , buyer_name , seller_name , receipt_url ;
     private Date order_date;
+
+    public String getProduct_name() {
+        return product_name;
+    }
+
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
+    }
+
+    public String getBuyer_name() {
+        return buyer_name;
+    }
+
+    public void setBuyer_name(String buyer_name) {
+        this.buyer_name = buyer_name;
+    }
+
+    public String getSeller_name() {
+        return seller_name;
+    }
+
+    public void setSeller_name(String seller_name) {
+        this.seller_name = seller_name;
+    }
 
     public String getReceipt_url() {
         return receipt_url;
@@ -70,14 +94,6 @@ public class Order {
 
     public void setUm(String um) {
         this.um = um;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Date getOrder_date() {

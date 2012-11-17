@@ -85,11 +85,12 @@ private transient Connection con;
     
     public ArrayList queryCategory(ServletContext context){
     
-            String query = "Select * from category";
+            String query = "Select * from category order by name";
             PreparedStatement stm = null ;
             ResultSet rs = null;
             ArrayList lista = new ArrayList(40);
             Category tmp;
+            String contextPath = context.getContextPath();
             
             try {     
             stm = con.prepareStatement(query);
@@ -101,7 +102,7 @@ private transient Connection con;
                     tmp.setId(rs.getInt("ID"));
                     tmp.setName(rs.getString("NAME"));
                     tmp.setDescription(rs.getString("DESCRIPTION"));
-                    tmp.setImageURL(context.getRealPath("Images/" + (rs.getString("IMAGE_URL"))));
+                    tmp.setImageURL(contextPath + "/Images/" + (rs.getString("IMAGE_URL")));
                     lista.add(tmp);
                 }
             rs.close(); 
@@ -120,13 +121,14 @@ private transient Connection con;
         return lista;
     }
     
-        public ArrayList queryProducts(ServletContext context , int category_id){
+        public ArrayList queryProductsList(ServletContext context , int category_id){
     
-            String query = "Select * from products where category_id = ?";
+            String query = "Select * from products where category_id = ? order by name";
             PreparedStatement stm = null ;
             ResultSet rs = null;
             ArrayList lista = new ArrayList(40);
             Product tmp;
+            String contextPath = context.getContextPath();
             
             try {        
             stm = con.prepareStatement(query);
@@ -136,16 +138,14 @@ private transient Connection con;
             while(rs.next())
                 {
                     tmp = new Product();
-                    tmp.setId(rs.getInt("id"));
-                    tmp.setSeller_id(rs.getInt("seller_id"));
-                    tmp.setCategory_id(category_id);
+                    tmp.setProduct_id(rs.getInt("id"));
                     tmp.setPrice(rs.getInt("price"));
+                    tmp.setCategory_id(category_id);
                     tmp.setQuantity(rs.getInt("quantity"));
-                    tmp.setName(rs.getString("name"));
+                    tmp.setProduct_name(rs.getString("name"));
                     tmp.setDescription(rs.getString("description"));
-                    tmp.setImage_url(rs.getString("image_url"));
+                    tmp.setImage_url(contextPath + "/Images/" + rs.getString("image_url"));
                     tmp.setUm(rs.getString("um"));
-                    tmp.setDate_order(rs.getDate("date_order"));
                     lista.add(tmp);
                     
                 } 
@@ -168,9 +168,12 @@ private transient Connection con;
         
     public ArrayList queryBuyerOrders(ServletContext context , int buyer_id){
     
-            String query = "Select o.id as id , o.UM as um , o.QUANTITY as quantity , o.PRICE as price , o.TOTAL_PRICE as total_price , o.DATE_ORDER as order_date , o.RECEIPT_URL as receipt_url, NAME as name " 
-                    + "from orders o join products p on o.PRODUCT_ID = p.ID " 
-                    + "where o.BUYER_ID = ?";
+            String query = "Select o.id as order_id , o.UM as um , o.QUANTITY as quantity , o.PRICE as price ,"
+                    + "o.TOTAL_PRICE as total_price , o.DATE_ORDER as order_date , o.RECEIPT_URL as receipt_url, "
+                    + "p.NAME as product_name , u.username as seller_name " 
+                    + "from (orders o join products p on o.PRODUCT_ID = p.ID) join users u on seller_id = u.id " 
+                    + "where o.BUYER_ID = ?"
+                    + "order by order_date";
             PreparedStatement stm = null ;
             ResultSet rs = null;
             ArrayList lista = new ArrayList(40);
@@ -184,9 +187,11 @@ private transient Connection con;
             while(rs.next())
                 {
                     tmp = new Order();
-                    tmp.setName(rs.getString("name"));
+                    tmp.setOrder_id(rs.getInt("order_id"));
+                    tmp.setSeller_name(rs.getString("seller_name"));
+                    tmp.setProduct_name(rs.getString("product_name"));
                     tmp.setOrder_date(rs.getDate("order_date"));
-                    tmp.setOrder_id(rs.getInt("id"));
+                    tmp.setReceipt_url(rs.getString("receipt_url"));
                     tmp.setPrice(rs.getInt("price"));
                     tmp.setQuantity(rs.getInt("quantity"));
                     tmp.setTotal_price(rs.getInt("total_price"));
@@ -208,6 +213,53 @@ private transient Connection con;
             
         return lista;
     }
+    
+    public Product queryProduct(ServletContext context , int product_id)
+    {
+           
+        String query = " Select p.id as product_id , category_id ,name , description , image_url , um , quantity , price , username"
+                     + " from products p join users u on u.ID = p.SELLER_ID "
+                     + " where p.ID = ? ";
+            PreparedStatement stm = null ;
+            ResultSet rs = null;
+            Product tmp = null;
+            String contextPath = context.getContextPath();
+            
+            try {        
+            stm = con.prepareStatement(query);
+            stm.setInt(1, product_id);
+            rs = stm.executeQuery();
+            
+            if(rs.next())
+                {
+                    tmp = new Product();
+                    tmp.setCategory_id(rs.getInt("category_id"));
+                    tmp.setDescription(rs.getString("description"));
+                    tmp.setImage_url(contextPath + "/Images/" + rs.getString("image_url"));
+                    tmp.setPrice(rs.getInt("price"));
+                    tmp.setProduct_id(product_id);
+                    tmp.setProduct_name(rs.getString("name"));
+                    tmp.setQuantity(rs.getInt("quantity"));
+                    tmp.setSeller_name(rs.getString("username"));
+                    tmp.setUm(rs.getString("um"));
+                } 
+                   rs.close(); 
+                   return tmp;
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+        }
+        finally {
+                try{       
+                   stm.close();   
+                 }
+                 catch (Exception ex) {
+                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+                 }
+            } 
+       return null;
+    }
+    
+    
     
     
     
