@@ -23,13 +23,15 @@ public class LoginServlet extends HttpServlet {
     
     private HtmlManager HtmlManager;
     private DBmanager DbManager;
-    private String contextPath;
+    private String contextPath , loginPattern , logoutPattern ;
     
     @Override
     public void init() throws ServletException {
-            this.DbManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
-            this.HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
-            this.contextPath = this.getServletContext().getContextPath();
+            DbManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
+            HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
+            contextPath = this.getServletContext().getContextPath();
+            loginPattern = contextPath + "/Login";
+            logoutPattern = contextPath +"/Logout";           
         }        
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -38,7 +40,7 @@ public class LoginServlet extends HttpServlet {
         String uri = request.getRequestURI();
       
         //Dopo il logout richiamo questa servlet che stampa a video "logout effettuato"
-        if(uri.equals(contextPath + "/Logout")) //Controllo se sto facendo logout
+        if(uri.equals(logoutPattern)) //Controllo se sto facendo logout
         {
                     HttpSession session = request.getSession(false);
                     if(session != null)

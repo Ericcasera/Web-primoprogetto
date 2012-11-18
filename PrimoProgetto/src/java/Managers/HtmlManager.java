@@ -101,7 +101,7 @@ public class HtmlManager {
     out.println("");
     out.println("<body onload=\"countdown()\">");
     out.println("    <center>");
-    out.println("        <h4 class=\"text-error\">Non sei autorizzato ad accedere a questa pagina. <br> Sarei reindirizzato a breve <a href=\""+redirectURL+"\">"+message+"</a>(<span id=\"countdown\" style=\"color:green;\">5</span>)</h4>");
+    out.println("        <h5 class=\"text-error\">Non sei autorizzato ad accedere a questa pagina. <br> Sarai reindirizzato a breve a questo indirizzo <a href=\""+redirectURL+"\">"+message+"</a>(<span id=\"countdown\" style=\"color:green;\">5</span>)</h5>");
     out.println("    </center>");
     out.println("</body>");
     out.println("</html>");

@@ -24,20 +24,21 @@ import javax.servlet.http.HttpSession;
  */
 public class BuyerFilter implements Filter {
 
-
+    
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         
         HttpServletRequest  req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        
+      
         HttpSession session = req.getSession(false);
         
         if(session == null || session.getAttribute("role") == null)
         {
              res.setContentType("text/html;charset=UTF-8");
              PrintWriter out = response.getWriter();   
-             HtmlManager.printErrorPage(out,"Index.jsp" ,req.getContextPath());
+             HtmlManager.printErrorPage(out,"Index.jsp " ,req.getContextPath());
+             out.close();
         }
         else
         {
@@ -48,11 +49,13 @@ public class BuyerFilter implements Filter {
              res.setContentType("text/html;charset=UTF-8");
              PrintWriter out = response.getWriter();   
              HtmlManager.printErrorPage(out,"Seller/SellerHome " ,req.getContextPath());
+             out.close();
             }
-            else {
+            else {  
                 chain.doFilter(request, response);
             }      
-        }}
+        }
+    }
         
     
     @Override
@@ -61,7 +64,7 @@ public class BuyerFilter implements Filter {
     }
    
     @Override
-    public void init(FilterConfig filterConfig) {        
+    public void init(FilterConfig filterConfig) {
     }
 
 }

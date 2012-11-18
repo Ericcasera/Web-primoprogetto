@@ -21,11 +21,11 @@ import javax.servlet.http.HttpSession;
 public class SellerServlet extends HttpServlet {
 
     private HtmlManager HtmlManager;
-    private DBmanager DbManager;
+    private DBmanager DBManager;
     
     @Override
     public void init() throws ServletException {
-            this.DbManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
+            this.DBManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
             this.HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
         }        
     
@@ -35,6 +35,7 @@ public class SellerServlet extends HttpServlet {
         
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+
         try {
             /* TODO output your page here. You may use following sample code. */
             out.println("<html>");
@@ -42,7 +43,7 @@ public class SellerServlet extends HttpServlet {
             out.println("<title>Servlet BuyerServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Benevenuto in buyer : " + (String) session.getAttribute("user"));
+            out.println("<h1>Benevenuto in buyer : ");
             out.println("<a href=\"/PrimoProgetto/Logout\" > Logout </a>");
             out.println("</body>");
             out.println("</html>");

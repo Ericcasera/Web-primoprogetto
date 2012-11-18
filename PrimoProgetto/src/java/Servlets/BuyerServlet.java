@@ -28,13 +28,17 @@ public class BuyerServlet extends HttpServlet {
 
     private HtmlManager HtmlManager;
     private DBmanager DbManager;
-    private String contextPath;
+    private String contextPath , buyerHomePattern , buyerOrdersPattern , buyerProductsPattern;
+    
     
     @Override
     public void init() throws ServletException {
-            this.DbManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
-            this.HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
-            this.contextPath = this.getServletContext().getContextPath();
+            DbManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
+            HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
+            contextPath = this.getServletContext().getContextPath();
+            buyerHomePattern = contextPath + "/Buyer/BuyerHome";
+            buyerOrdersPattern = contextPath + "/Buyer/Orders";
+            buyerProductsPattern = contextPath + "/Buyer/Products";
             /*La query categoria si puo mettere qua (dato che non cambia mai) oppure fare un meccanismo ci chasing che
             * tenga conto delle modifiche oppure fare un metodo (tipo un url speciale) che aggiorna le categorie
             */
@@ -48,7 +52,7 @@ public class BuyerServlet extends HttpServlet {
         ArrayList lista = DbManager.queryCategory(this.getServletContext());
         String uri = request.getRequestURI();
         
-        if(uri.equals(contextPath + "/Buyer/BuyerHome"))
+        if(uri.equals(buyerHomePattern))
         {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
@@ -81,7 +85,7 @@ public class BuyerServlet extends HttpServlet {
             out.close();
         }
         }
-        else if(uri.equals(contextPath + "/Buyer/Products"))
+        else if(uri.equals(buyerProductsPattern))
         {
             String error = null;       
             ArrayList products_list = null;
@@ -123,7 +127,7 @@ public class BuyerServlet extends HttpServlet {
             while(iter.hasNext())
             {
             Product tmp = (Product) iter.next();
-            out.println("<tr><td><a href=\"BuyRequest?ID="+ tmp.getProduct_id() +"\">"+ tmp.getProduct_name()+"</td>");
+            out.println("<tr><td><a href=\"BuyOrderRequest?ID="+ tmp.getProduct_id() +"\">"+ tmp.getProduct_name()+"</td>");
             out.println("<td>" +     tmp.getDescription() + "</td>");
             out.println("<td>" +     tmp.getUm() + "</td>");
             out.println("<td>" +     tmp.getPrice() + "</td>");

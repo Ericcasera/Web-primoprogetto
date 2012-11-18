@@ -12,6 +12,14 @@
         <filter-name>LoginFilter</filter-name>
         <filter-class>Filters.LoginFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>BuyerOrderFilter</filter-name>
+        <filter-class>Filters.BuyerOrderFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>BuyerOrderFilter</filter-name>
+        <servlet-name>BuyerBuyOrder</servlet-name>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
         <url-pattern>/Login</url-pattern>
@@ -62,7 +70,7 @@
     </servlet>
     <servlet>
         <servlet-name>BuyerBuyOrder</servlet-name>
-        <servlet-class>Servlets.BuyerBuyOrder</servlet-class>
+        <servlet-class>Servlets.BuyerOrderServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -90,11 +98,15 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BuyerBuyOrder</servlet-name>
-        <url-pattern>/Buyer/BuyRequest</url-pattern>
+        <url-pattern>/Buyer/BuyOrderRequest</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BuyerBuyOrder</servlet-name>
-        <url-pattern>/Buyer/BuyConfirm</url-pattern>
+        <url-pattern>/Buyer/BuyOrderConfirm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BuyerBuyOrder</servlet-name>
+        <url-pattern>/Buyer/BuyOrderResponse</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

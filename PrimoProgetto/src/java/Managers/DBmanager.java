@@ -9,10 +9,12 @@ import Beans.Order;
 import Beans.Product;
 import Beans.User;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
@@ -259,11 +261,76 @@ private transient Connection con;
        return null;
     }
     
+    public boolean queryUpdateProdcuts(Product product){
+        String query = " UPDATE products SET quantity = quantity - ? where id = ? ";   
+        PreparedStatement stm = null ;
+        
+    try {  
+            
+        stm = con.prepareStatement(query);
+        stm.setInt(1, product.getQuantity());
+        stm.setInt(2, product.getProduct_id());
+        
+        int result = stm.executeUpdate();
+        if(result == 0) {
+            return false;
+        }
+        else {
+            return true;
+        }
+              
+   } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+        }
+        finally {
+                try{       
+                   stm.close();   
+                   }
+                 catch (Exception ex) {
+                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+                   }
+                 }   
+        
+        return false;
+   }
     
-    
-    
-    
-    
-    
+   public boolean queryInsertBuyOrder(Product product , int buyer_id){
+        
+            String query = " Insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order) "
+                             + "values (? , ? , ? , ? , ? , ? , ?)";
+            PreparedStatement stm = null ;
+           
+            try {        
+            stm = con.prepareStatement(query);
+            stm.setInt(1, buyer_id);
+            stm.setInt(2, product.getProduct_id());
+            stm.setString(3, product.getUm());
+            stm.setInt(4, product.getQuantity());
+            stm.setInt(5, product.getPrice()); 
+            stm.setInt(6, product.getPrice() * product.getQuantity());
+            //Set receipt
+            //Set date
+            int result = stm.executeUpdate();
+            
+            if(result == 0) {
+                    return false;
+                }
+            else {
+                    return true;
+                }          
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+        }
+        finally {
+                try{       
+                   stm.close();   
+                 }
+                 catch (Exception ex) {
+                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+                 }
+            }
+            
+            return false;
+   }
        
 }

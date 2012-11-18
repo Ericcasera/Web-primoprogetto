@@ -4,9 +4,7 @@
  */
 package Filters;
 
-import Managers.HtmlManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -22,12 +20,9 @@ import javax.servlet.http.HttpSession;
  * @author Daniel
  */
 public class LoginFilter implements Filter {
-
-    private FilterConfig filterConfig = null;
     
-    public LoginFilter() {
-    }    
-
+    private String buyerHomePattern , sellerHomePattern;
+    
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
@@ -44,20 +39,21 @@ public class LoginFilter implements Filter {
         }
         else
         {             
-            String role = session.getAttribute("role").toString();
-            int x = Integer.parseInt(role);           
+            int x = Integer.parseInt(session.getAttribute("role").toString());           
             if(x == 1) {
-                res.sendRedirect(req.getContextPath() + "/Buyer/BuyerHome");
+                res.sendRedirect(buyerHomePattern);
             }
             else {
-                res.sendRedirect(req.getContextPath() + "/Seller/SellerHome");
+                res.sendRedirect(sellerHomePattern);
             }  
         }     
         }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        this.filterConfig = filterConfig;
+         String contextPath = filterConfig.getServletContext().getContextPath();
+         buyerHomePattern   = contextPath + "/Buyer/BuyerHome";
+         sellerHomePattern  = contextPath + "/Seller/SellerHome";
     }
 
     @Override
