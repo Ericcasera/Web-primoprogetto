@@ -52,8 +52,8 @@ public class LoginFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
          String contextPath = filterConfig.getServletContext().getContextPath();
-         buyerHomePattern   = contextPath + "/Buyer/BuyerHome";
-         sellerHomePattern  = contextPath + "/Seller/SellerHome";
+         buyerHomePattern   = contextPath + "/Buyer/BuyerController?op=home";
+         sellerHomePattern  = contextPath + "/Seller/SellerController?op=home";
     }
 
     @Override

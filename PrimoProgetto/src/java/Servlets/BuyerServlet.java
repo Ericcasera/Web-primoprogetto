@@ -28,7 +28,7 @@ public class BuyerServlet extends HttpServlet {
 
     private HtmlManager HtmlManager;
     private DBmanager DbManager;
-    private String contextPath , buyerHomePattern , buyerOrdersPattern , buyerProductsPattern;
+    private String contextPath , homePattern , ordersPattern , productsPattern;
     
     
     @Override
@@ -36,9 +36,9 @@ public class BuyerServlet extends HttpServlet {
             DbManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
             HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
             contextPath = this.getServletContext().getContextPath();
-            buyerHomePattern = contextPath + "/Buyer/BuyerHome";
-            buyerOrdersPattern = contextPath + "/Buyer/Orders";
-            buyerProductsPattern = contextPath + "/Buyer/Products";
+            homePattern = "home";
+            ordersPattern = "orders";
+            productsPattern = "products";
             /*La query categoria si puo mettere qua (dato che non cambia mai) oppure fare un meccanismo ci chasing che
             * tenga conto delle modifiche oppure fare un metodo (tipo un url speciale) che aggiorna le categorie
             */
@@ -50,9 +50,9 @@ public class BuyerServlet extends HttpServlet {
   
         HttpSession session = request.getSession(false);
         ArrayList lista = DbManager.queryCategory(this.getServletContext());
-        String uri = request.getRequestURI();
+        String op = request.getParameter("op");
         
-        if(uri.equals(buyerHomePattern))
+        if(op.equals(homePattern))
         {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
@@ -66,15 +66,15 @@ public class BuyerServlet extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Benevenuto in buyer : " + (String) session.getAttribute("user") );
             out.println("<br><h1>Il mio path è : " + request.getContextPath());
-            out.println("<br><a href=\"/PrimoProgetto/Logout\" > Logout </a>");
-            out.println("<br><a href=\"/PrimoProgetto/Buyer/Orders\" > I miei ordini </a>"); 
+            out.println("<br><a href=\"/PrimoProgetto/LoginController?op=logout\" > Logout </a>");
+            out.println("<br><a href=\"/PrimoProgetto/Buyer/BuyerController?op=orders\" > I miei ordini </a>"); 
             out.println("<table><tr><td>ID</td><td>Nome</td><td>Descrizione</td><td>Image_ULR</td></tr>");
             Iterator iter = lista.iterator();
             while(iter.hasNext())
             {
             Category tmp = (Category) iter.next();
             out.println("<tr><td>" + tmp.getId() + "</td>");
-            out.println("<td><a href=\""+ contextPath +"/Buyer/Products?category="+ tmp.getId()+"\">" + tmp.getName() + " </a> </td>");
+            out.println("<td><a href=\""+ contextPath +"/Buyer/BuyerController?op=products&category="+ tmp.getId()+"\">" + tmp.getName() + " </a> </td>");
             out.println("<td>" + tmp.getDescription() + "</td>");
             out.println("<td><img src=\""+tmp.getImageURL() +"\" width=\"200px\" height=\"200px\"></td></tr>");
             }
@@ -85,7 +85,7 @@ public class BuyerServlet extends HttpServlet {
             out.close();
         }
         }
-        else if(uri.equals(buyerProductsPattern))
+        else if(op.equals(productsPattern))
         {
             String error = null;       
             ArrayList products_list = null;
@@ -127,7 +127,7 @@ public class BuyerServlet extends HttpServlet {
             while(iter.hasNext())
             {
             Product tmp = (Product) iter.next();
-            out.println("<tr><td><a href=\"BuyOrderRequest?ID="+ tmp.getProduct_id() +"\">"+ tmp.getProduct_name()+"</td>");
+            out.println("<tr><td><a href=\"BuyerOrderController?op=request&ID="+ tmp.getProduct_id() +"\">"+ tmp.getProduct_name()+"</td>");
             out.println("<td>" +     tmp.getDescription() + "</td>");
             out.println("<td>" +     tmp.getUm() + "</td>");
             out.println("<td>" +     tmp.getPrice() + "</td>");

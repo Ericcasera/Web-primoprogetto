@@ -25,7 +25,7 @@ public class BuyerOrderServlet extends HttpServlet {
     private HtmlManager HtmlManager;
     private DBmanager DbManager;
     private PdfManager PdfManager;
-    private String contextPath , buyOrderRequestPattern , buyOrderConfirmPattern , buyOrderResponsePattern;
+    private String contextPath , RequestPattern , ConfirmPattern , ResponsePattern;
     
     @Override
     public void init() throws ServletException {
@@ -33,9 +33,9 @@ public class BuyerOrderServlet extends HttpServlet {
             HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
             contextPath = this.getServletContext().getContextPath();
             PdfManager = new PdfManager();
-            buyOrderRequestPattern  = contextPath + "/Buyer/BuyOrderRequest";
-            buyOrderConfirmPattern  = contextPath + "/Buyer/BuyOrderConfirm";
-            buyOrderResponsePattern = contextPath + "/Buyer/BuyOrderResponse";     
+            RequestPattern  = "request";
+            ConfirmPattern  = "confirm";
+            ResponsePattern = "response";     
             /*La query categoria si puo mettere qua (dato che non cambia mai) oppure fare un meccanismo ci chasing che
             * tenga conto delle modifiche oppure fare un metodo (tipo un url speciale) che aggiorna le categorie
             */
@@ -46,12 +46,12 @@ public class BuyerOrderServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession(false);
-        String uri = request.getRequestURI();
+        String op = request.getParameter("op");
         String message = null;
         Product product = null;
         int type = 0;
         
-        if(uri.equals(buyOrderRequestPattern))
+        if(op.equals(RequestPattern))
          
         {
         String product_id = request.getParameter("ID");
@@ -92,7 +92,7 @@ public class BuyerOrderServlet extends HttpServlet {
             out.println("Venditore :" + product.getSeller_name()+ " <br>");
             out.println("Descrizione :" + product.getDescription()+ " <br>");
             }
-            out.println("<form action=\"BuyOrderConfirm\" method=\"post\" > ");
+            out.println("<form action=\"BuyerOrderController?op=confirm\" method=\"post\" > ");
             out.println("Numero di ordini  <input type=\"number\" value=\"1\" name=\"number\"> <br>");
             out.println("<button type=\"submit\">Submit</button>");
             out.println("</form>");
@@ -104,7 +104,7 @@ public class BuyerOrderServlet extends HttpServlet {
         }
         
         }
-        else if(uri.equals(buyOrderConfirmPattern))
+        else if(op.equals(ConfirmPattern))
         {
            int number = Integer.parseInt(request.getParameter("number"));
            product = (Product) session.getAttribute("order");
@@ -129,7 +129,7 @@ public class BuyerOrderServlet extends HttpServlet {
             out.println("Venditore :" + product.getSeller_name()+ " <br>");
             out.println("Descrizione :" + product.getDescription()+ " <br>");
             out.println("Prezzo totale : " +product.getQuantity()*product.getPrice() + "$ <br>");
-            out.println("<a href=\"BuyOrderResponse\">Conferma ordine</a><br>");
+            out.println("<a href=\"BuyerOrderController?op=response\">Conferma ordine</a><br>");
             out.println("</body>");
             out.println("</html>");
             

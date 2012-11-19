@@ -74,39 +74,19 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/Login</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/Logout</url-pattern>
+        <url-pattern>/LoginController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BuyerServlet</servlet-name>
-        <url-pattern>/Buyer/BuyerHome</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>BuyerServlet</servlet-name>
-        <url-pattern>/Buyer/Products</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>BuyerServlet</servlet-name>
-        <url-pattern>/Buyer/Orders</url-pattern>
+        <url-pattern>/Buyer/BuyerController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SellerServlet</servlet-name>
-        <url-pattern>/Seller/*</url-pattern>
+        <url-pattern>/Seller/SellerController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BuyerBuyOrder</servlet-name>
-        <url-pattern>/Buyer/BuyOrderRequest</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>BuyerBuyOrder</servlet-name>
-        <url-pattern>/Buyer/BuyOrderConfirm</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>BuyerBuyOrder</servlet-name>
-        <url-pattern>/Buyer/BuyOrderResponse</url-pattern>
+        <url-pattern>/Buyer/BuyerOrderController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

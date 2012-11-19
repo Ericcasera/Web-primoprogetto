@@ -24,6 +24,7 @@ import javax.servlet.http.HttpSession;
  */
 public class BuyerFilter implements Filter {
 
+    private String contextPath , redirectURL;
     
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -37,7 +38,7 @@ public class BuyerFilter implements Filter {
         {
              res.setContentType("text/html;charset=UTF-8");
              PrintWriter out = response.getWriter();   
-             HtmlManager.printErrorPage(out,"Index.jsp " ,req.getContextPath());
+             HtmlManager.printErrorPage(out,"Login " , redirectURL , contextPath);
              out.close();
         }
         else
@@ -48,7 +49,7 @@ public class BuyerFilter implements Filter {
             {
              res.setContentType("text/html;charset=UTF-8");
              PrintWriter out = response.getWriter();   
-             HtmlManager.printErrorPage(out,"Seller/SellerHome " ,req.getContextPath());
+             HtmlManager.printErrorPage(out,"SellerHome " , redirectURL , contextPath);
              out.close();
             }
             else {  
@@ -65,6 +66,8 @@ public class BuyerFilter implements Filter {
    
     @Override
     public void init(FilterConfig filterConfig) {
+        contextPath = filterConfig.getServletContext().getContextPath();
+        redirectURL = contextPath + "/index.jsp";
     }
 
 }

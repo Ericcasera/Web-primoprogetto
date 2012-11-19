@@ -20,7 +20,7 @@
                 <br>
             </div>
             
-            <form action="Login" method="post" class="form-horizontal">
+            <form action="LoginController?op=login" method="post" class="form-horizontal">
                   <div class="control-group">
                       <label class="control-label" for="username">Username</label>
                          <div class="controls">

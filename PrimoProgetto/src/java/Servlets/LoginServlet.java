@@ -30,17 +30,17 @@ public class LoginServlet extends HttpServlet {
             DbManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
             HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
             contextPath = this.getServletContext().getContextPath();
-            loginPattern = contextPath + "/Login";
-            logoutPattern = contextPath +"/Logout";           
+            loginPattern = "login";
+            logoutPattern = "logout";           
         }        
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String uri = request.getRequestURI();
+        String op = request.getParameter("op");
       
         //Dopo il logout richiamo questa servlet che stampa a video "logout effettuato"
-        if(uri.equals(logoutPattern)) //Controllo se sto facendo logout
+        if(op.equals(logoutPattern)) //Controllo se sto facendo logout
         {
                     HttpSession session = request.getSession(false);
                     if(session != null)
@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
                         session.invalidate();
                     }
                     request.setAttribute("message", "Login effettuato con successo");
-                    request.getRequestDispatcher("/Login").forward(request, response);
+                    request.getRequestDispatcher("LoginController?op=login").forward(request, response);
                     return;
         }
         
@@ -83,10 +83,10 @@ public class LoginServlet extends HttpServlet {
                     session.setAttribute("role", tmp.getRole());
                     
                     if(tmp.getRole() == 1) {
-                        response.sendRedirect(contextPath + "/Buyer/BuyerHome");
+                        response.sendRedirect(contextPath + "/Buyer/BuyerController?op=home");
                     }
                     else {
-                        response.sendRedirect(contextPath + "/Seller/SellerHome");
+                        response.sendRedirect(contextPath + "/Seller/SellerController?op=home");
                     }
                 }             
     }

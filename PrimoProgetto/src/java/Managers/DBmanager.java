@@ -9,12 +9,13 @@ import Beans.Order;
 import Beans.Product;
 import Beans.User;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
@@ -308,8 +309,8 @@ private transient Connection con;
             stm.setInt(4, product.getQuantity());
             stm.setInt(5, product.getPrice()); 
             stm.setInt(6, product.getPrice() * product.getQuantity());
+            stm.setDate(7, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
             //Set receipt
-            //Set date
             int result = stm.executeUpdate();
             
             if(result == 0) {

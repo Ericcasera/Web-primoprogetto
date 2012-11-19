@@ -30,7 +30,7 @@ public class HtmlManager {
            out.println("    <div class=\"login-title\">");
            out.println("        <h4>Benvenuti a \"vendo piante\" , prego loggarsi</h4><br>");
            out.println("    </div>");         
-           out.println("        <form action=\"Login\" method=\"post\" class=\"form-horizontal\">");          
+           out.println("        <form action=\"LoginController?op=login\" method=\"post\" class=\"form-horizontal\">");          
            out.println("        <div class=\"control-group\">");
            out.println("            <label class=\"control-label\" for=\"username\">Username</label>");
            out.println("                <div class=\"controls\">");
@@ -77,13 +77,13 @@ public class HtmlManager {
 
           }
     
-    static public void printErrorPage(PrintWriter out, String message , String redirectURL) //String message
+    static public void printErrorPage(PrintWriter out, String message , String redirectURL , String contextPath) //String message
     {
     out.println("<!DOCTYPE HTML>");       
     out.println("<html>");
     out.println("<head>");
     out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");     
-    out.println("<link href=\""+redirectURL+"/Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
+    out.println("<link href=\""+contextPath+"/Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
     out.println("<title>ErrorPage</title>");
     out.println("    <script type=\"text/javascript\">");
     out.println("       var ss = 5;");
