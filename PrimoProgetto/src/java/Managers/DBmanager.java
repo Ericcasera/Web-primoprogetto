@@ -14,8 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
@@ -173,7 +171,7 @@ private transient Connection con;
     
             String query = "Select o.id as order_id , o.UM as um , o.QUANTITY as quantity , o.PRICE as price ,"
                     + "o.TOTAL_PRICE as total_price , o.DATE_ORDER as order_date , o.RECEIPT_URL as receipt_url, "
-                    + "p.NAME as product_name , u.username as seller_name " 
+                    + "p.NAME as product_name , p.image_url as image_url , u.username as seller_name " 
                     + "from (orders o join products p on o.PRODUCT_ID = p.ID) join users u on seller_id = u.id " 
                     + "where o.BUYER_ID = ?"
                     + "order by order_date";
@@ -181,6 +179,7 @@ private transient Connection con;
             ResultSet rs = null;
             ArrayList lista = new ArrayList(40);
             Order tmp;
+            String contextPath = context.getContextPath();
             
             try {        
             stm = con.prepareStatement(query);
@@ -198,6 +197,7 @@ private transient Connection con;
                     tmp.setPrice(rs.getInt("price"));
                     tmp.setQuantity(rs.getInt("quantity"));
                     tmp.setTotal_price(rs.getInt("total_price"));
+                    tmp.setImage_url(contextPath + "/Images/" + rs.getString("image_url"));
                     tmp.setUm(rs.getString("um"));
                     lista.add(tmp);  
                 } 

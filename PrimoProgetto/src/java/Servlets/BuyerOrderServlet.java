@@ -25,7 +25,7 @@ public class BuyerOrderServlet extends HttpServlet {
     private HtmlManager HtmlManager;
     private DBmanager DbManager;
     private PdfManager PdfManager;
-    private String contextPath , RequestPattern , ConfirmPattern , ResponsePattern;
+    private String contextPath , RequestPattern , ConfirmPattern , ResponsePattern , redirectURL;
     
     @Override
     public void init() throws ServletException {
@@ -35,70 +35,39 @@ public class BuyerOrderServlet extends HttpServlet {
             PdfManager = new PdfManager();
             RequestPattern  = "request";
             ConfirmPattern  = "confirm";
-            ResponsePattern = "response";     
-            /*La query categoria si puo mettere qua (dato che non cambia mai) oppure fare un meccanismo ci chasing che
-            * tenga conto delle modifiche oppure fare un metodo (tipo un url speciale) che aggiorna le categorie
-            */
+            ResponsePattern = "response";
+            redirectURL = contextPath + "/BuyerController?op=home";
         } 
-    
-    
+      
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
         HttpSession session = request.getSession(false);
         String op = request.getParameter("op");
-        String message = null;
         Product product = null;
-        int type = 0;
         
         if(op.equals(RequestPattern))
          
         {
-        String product_id = request.getParameter("ID");
-        try{
-        
-            product = DbManager.queryProduct(this.getServletContext(), Integer.parseInt(product_id));
-           
+        //Controllo che l'input sia un id   
+        try{       
+            product = DbManager.queryProduct(this.getServletContext(), Integer.parseInt(request.getParameter("product")));           
         }catch (NumberFormatException ex){
-            message = "L'id del prodotto non è corretto!!! Smettila di sfarzare con l'url";
-            type = -1;
+            response.sendRedirect(redirectURL);
+            return;
         }
+        //Controllo che ci sia un prodotto
+        if(product == null)
+            {
+                response.sendRedirect(redirectURL);
+                return;
+            }
+        session.setAttribute("order", product);
         
-        if(product != null ) {session.setAttribute("order", product);}
-
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet BuyerBuyOrder</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            if(type == -1)
-            {
-            out.println("<h2>" + message + " </h2>");
-            }
-            else if(product == null) {
-                out.println("<h2>Siamo spiacenti ma il prodotto da lei cercato non è stato trovato.</h2>");
-            }
-            else
-            {
-            out.println("<h1>Il Prodotto da te cercato è " + product.getProduct_name() + "</h1>");
-            out.println("<img src=\""+ product.getImage_url() +"\" <br>");
-            out.println("Quantità :" + product.getQuantity()+ " <br>");
-            out.println("Prezzo :" + product.getPrice()+ " <br>");
-            out.println("Unità di misura :" + product.getUm()+ " <br>");
-            out.println("Venditore :" + product.getSeller_name()+ " <br>");
-            out.println("Descrizione :" + product.getDescription()+ " <br>");
-            }
-            out.println("<form action=\"BuyerOrderController?op=confirm\" method=\"post\" > ");
-            out.println("Numero di ordini  <input type=\"number\" value=\"1\" name=\"number\"> <br>");
-            out.println("<button type=\"submit\">Submit</button>");
-            out.println("</form>");
-            out.println("</body>");
-            out.println("</html>");
-            
+
         } finally {            
             out.close();
         }
@@ -106,33 +75,31 @@ public class BuyerOrderServlet extends HttpServlet {
         }
         else if(op.equals(ConfirmPattern))
         {
-           int number = Integer.parseInt(request.getParameter("number"));
+          int number;  
+          //Controllo l'input
+            try{       
+                 number = Integer.parseInt(request.getParameter("number"));          
+               }
+                catch (NumberFormatException ex){
+                  response.sendRedirect(redirectURL);
+                  return;
+               }  
+          //Controllo che ci sia un prodotto da acquistare in sessione
            product = (Product) session.getAttribute("order");
+           if(product == null)
+            {
+                response.sendRedirect(redirectURL);
+                return;
+            }
+           
+           
            product.setQuantity(number);
            session.setAttribute("order", product);
-           
-           
+    
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet BuyerBuyOrder</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Conferma ordine per : " + product.getProduct_name() + "</h1>");
-            out.println("<img src=\""+ product.getImage_url() +"\" <br>");
-            out.println("Quantità :" + product.getQuantity()+ " <br>");
-            out.println("Prezzo :" + product.getPrice()+ " <br>");
-            out.println("Unità di misura :" + product.getUm()+ " <br>");
-            out.println("Venditore :" + product.getSeller_name()+ " <br>");
-            out.println("Descrizione :" + product.getDescription()+ " <br>");
-            out.println("Prezzo totale : " +product.getQuantity()*product.getPrice() + "$ <br>");
-            out.println("<a href=\"BuyerOrderController?op=response\">Conferma ordine</a><br>");
-            out.println("</body>");
-            out.println("</html>");
-            
+
         } finally {            
             out.close();
         } 
@@ -140,10 +107,19 @@ public class BuyerOrderServlet extends HttpServlet {
         else
         {
         product = (Product) session.getAttribute("order");
-        boolean result = false;
-        DbManager.queryInsertBuyOrder(product, Integer.parseInt(session.getAttribute("user_id").toString()));
         
-       // boolean result = DbManager.queryUpdateProdcuts(product);
+        if(product == null)
+            {
+                response.sendRedirect(redirectURL);
+                return;
+            }   
+        
+        boolean result = false;
+        
+                
+        //result = DbManager.queryInsertBuyOrder(product, Integer.parseInt(session.getAttribute("user_id").toString()));
+        
+        // boolean result = DbManager.queryUpdateProdcuts(product);
         /* if(result)
          *      String sha1 = Pdfmanager.createRecepit();
          *      insertOrder (product , sha1);
@@ -153,24 +129,6 @@ public class BuyerOrderServlet extends HttpServlet {
         *       sessionRemove(Order);
         *       sendRedirect : (prodcuts , error , category_id);
         */        
-                response.setContentType("text/html;charset=UTF-8");
-        
-       PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet BuyerBuyOrder</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Conferma ordine per : " + product.getProduct_name() + "</h1><br>");
-            out.println("<h2>Il risultato è : " + result + "</h2>");
-            out.println("</body>");
-            out.println("</html>");
-            
-        } finally {            
-            out.close();
-        } 
         
         }
         

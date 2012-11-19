@@ -4,15 +4,11 @@
  */
 package Servlets;
 
-import Beans.Category;
-import Beans.Order;
-import Beans.Product;
 import Managers.DBmanager;
 import Managers.HtmlManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +25,7 @@ public class BuyerServlet extends HttpServlet {
     private HtmlManager HtmlManager;
     private DBmanager DbManager;
     private String contextPath , homePattern , ordersPattern , productsPattern;
+    private String redirectURL;
     
     
     @Override
@@ -39,109 +36,53 @@ public class BuyerServlet extends HttpServlet {
             homePattern = "home";
             ordersPattern = "orders";
             productsPattern = "products";
-            /*La query categoria si puo mettere qua (dato che non cambia mai) oppure fare un meccanismo ci chasing che
-            * tenga conto delle modifiche oppure fare un metodo (tipo un url speciale) che aggiorna le categorie
-            */
+            redirectURL = contextPath + "/Buyer/BuyerController?op=home";
         }        
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {  
-        
-  
+         
         HttpSession session = request.getSession(false);
-        ArrayList lista = DbManager.queryCategory(this.getServletContext());
+        ArrayList category_list = DbManager.queryCategory(this.getServletContext());
         String op = request.getParameter("op");
         
         if(op.equals(homePattern))
         {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        
+        PrintWriter out = response.getWriter();      
         try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>BuyerHome</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Benevenuto in buyer : " + (String) session.getAttribute("user") );
-            out.println("<br><h1>Il mio path è : " + request.getContextPath());
-            out.println("<br><a href=\"/PrimoProgetto/LoginController?op=logout\" > Logout </a>");
-            out.println("<br><a href=\"/PrimoProgetto/Buyer/BuyerController?op=orders\" > I miei ordini </a>"); 
-            out.println("<table><tr><td>ID</td><td>Nome</td><td>Descrizione</td><td>Image_ULR</td></tr>");
-            Iterator iter = lista.iterator();
-            while(iter.hasNext())
-            {
-            Category tmp = (Category) iter.next();
-            out.println("<tr><td>" + tmp.getId() + "</td>");
-            out.println("<td><a href=\""+ contextPath +"/Buyer/BuyerController?op=products&category="+ tmp.getId()+"\">" + tmp.getName() + " </a> </td>");
-            out.println("<td>" + tmp.getDescription() + "</td>");
-            out.println("<td><img src=\""+tmp.getImageURL() +"\" width=\"200px\" height=\"200px\"></td></tr>");
-            }
-            out.println("</table>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
+                HtmlManager.printBuyerHomePage(out,  category_list);
+            } finally {            
             out.close();
+                }
         }
-        }
+        
+        
         else if(op.equals(productsPattern))
         {
             String error = null;       
             ArrayList products_list = null;
-            if(request.getParameter("category") == null)
-            {
-            error = "Categoria non trovata";
-            }
-            else
-            {
-                try{
+            int type = 0;
+            
+            try{
               products_list = DbManager.queryProductsList(this.getServletContext(), Integer.parseInt(request.getParameter("category")));
                 }
                 catch (NumberFormatException e){
-                error = e.toString();
+                response.sendRedirect(redirectURL);
+                return;
                 }
-            }
                    
             
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();  
-            try{
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>ProductPage</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            if(error != null)
-            {
-            out.println("<h1>Ce stato un errore :" + error + "<h1><br>");
-            }
-            else if(products_list.isEmpty())
-            {
-            out.println("<h1>Non ci sono elementi in questa categoria<h1><br>");
-            }
-            else
-            {
-            out.println("<table><tr><td>Nome</td><td>Descrizione</td><td>Um</td><td>Price</td><td>Quantity</td></tr>");           
-            Iterator iter = products_list.iterator();
-            while(iter.hasNext())
-            {
-            Product tmp = (Product) iter.next();
-            out.println("<tr><td><a href=\"BuyerOrderController?op=request&ID="+ tmp.getProduct_id() +"\">"+ tmp.getProduct_name()+"</td>");
-            out.println("<td>" +     tmp.getDescription() + "</td>");
-            out.println("<td>" +     tmp.getUm() + "</td>");
-            out.println("<td>" +     tmp.getPrice() + "</td>");
-            out.println("<td>" +     tmp.getQuantity() + "</td></tr>");
-            }
-            out.println("</table>"); 
-            }        
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
-            out.close();
+            try{     
+                HtmlManager.printBuyerProdcutsPage(out,  category_list, products_list, Integer.parseInt(request.getParameter("category")) ,  error, type);             
+             } finally {            
+             out.close();
+             }
         }
-        }
-        else
+         
+        else 
         {     
             ArrayList order_list = null;
             String id = session.getAttribute("user_id").toString();
@@ -151,34 +92,7 @@ public class BuyerServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();  
             try{
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>ProductPage</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            if(order_list.isEmpty())
-            {
-            out.println("<h1>Non ci sono elementi in questa categoria<h1><br>");
-            }
-            else
-            {
-            out.println("<table><tr><td>ID</td><td>Nome</td><td>prezzo</td><td>Um</td><td>quantita</td><td>prezzo totale</td><td>Data ordine</td></tr>");           
-            Iterator iter = order_list.iterator();
-            while(iter.hasNext())
-            {
-            Order tmp = (Order) iter.next();
-            out.println("<tr><td>" + tmp.getOrder_id() + "</td>");
-            out.println("<td>"+ tmp.getProduct_name() + "</td>");
-            out.println("<td>" + tmp.getPrice() + "</td>");
-            out.println("<td>" + tmp.getUm() + "</td>");
-            out.println("<td>" + tmp.getQuantity() + "</td>");
-            out.println("<td>" + tmp.getTotal_price() + "</td>");
-            out.println("<td>" + tmp.getOrder_date() + "</td></tr>");
-            }
-            out.println("</table>"); 
-            }        
-            out.println("</body>");
-            out.println("</html>");
+                HtmlManager.printBuyerOrdersPage(out, category_list, order_list);
         } finally {            
             out.close();
         }  }    

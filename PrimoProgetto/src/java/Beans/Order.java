@@ -13,8 +13,16 @@ import java.sql.Date;
 public class Order {
     
     private int order_id , product_id , quantity , price , total_price;
-    private String um , product_name , buyer_name , seller_name , receipt_url ;
+    private String um , product_name , buyer_name , seller_name , receipt_url , image_url ;
     private Date order_date;
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
 
     public String getProduct_name() {
         return product_name;

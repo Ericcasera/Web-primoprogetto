@@ -4,8 +4,12 @@
  */
 package Managers;
 
+import Beans.Category;
+import Beans.Order;
+import Beans.Product;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -108,27 +112,222 @@ public class HtmlManager {
 
     }
     
-    public void printBuyerHomePage(ArrayList category_list , String username)
+    public void printBuyerHomePage(PrintWriter out, ArrayList category_list)
     {
+    out.println("<!DOCTYPE html>");
+    out.println("<html><head>");
+    out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+    out.println("<link href=\"/PrimoProgetto/Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
+    out.println("   <title>HomePage</title> </head> <body>");
     
+    this.printPageHeader(out, category_list);
+    
+    out.println("       <div class=\"span10\">");
+    out.println("           <table class=\"table\"> <tbody>");
+    Iterator iter = category_list.iterator();
+            while(iter.hasNext())
+            {
+            Category tmp = (Category) iter.next();
+            out.println("<tr><td class=\"span3\"><img src=\""+ tmp.getImageURL() +"\" width=\"200\" height=\"200\" alt=\""+ tmp.getName() +"\"></td>");
+            out.println("<td><a href=\"BuyerController?op=products&category=" + tmp.getId() + "\">"
+                    + "<h4>"+ tmp.getName() +"</h4></a>" + tmp.getDescription() + "</td></tr>");
+            }     
+    out.println("           </tbody> </table> </div> </div> </div>");
+    out.println("   </body>");
+    out.println("</html>");
     
     
     }
     
-    public void printBuyerProdcutsPage(ArrayList category_list , ArrayList products_list ,String username , String message , int type)
+    public void printBuyerProdcutsPage(PrintWriter out, ArrayList category_list , ArrayList products_list , int category_id ,  String message , int type)
     {
-    //type = 1 per messaggio postitivo (acquisto eseguito con successo)
-    //type = -1 per messaggio negativo (categoria non trovata , acquisto non eseguito)
     
-    }
-    
-    public void printBuyerOrdersPage(ArrayList category_list , ArrayList orders_list , String username)
-    {
+    out.println("<!DOCTYPE html>");
+    out.println("<html><head>");
+    out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+    out.println("<link href=\"/PrimoProgetto/Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
+    out.println("<script src=\"/PrimoProgetto/Bootstrap/js/jquery-1.8.2.js\"></script>");
+    out.println("<script src=\"/PrimoProgetto/Bootstrap/js/bootstrap.min.js\"></script>");
+    out.println("   <title>Lista Prodotti</title> </head> <body>");
 
+    String category_name = this.printProductPageHeader(out, category_list , category_id);
+        
+    out.println("       <div class=\"span10\">"); 
+    out.println("           <h2>"+ category_name +"</h2>");
+        if(products_list.isEmpty()) {
+            out.println("<h3>Non ci sono prodotto per questa categoria</h3>");
+        }  
+    if(message != null)
+             {  
+                out.println("<div align=\"center\" class=\"span8\">");
+                if(type == -1)
+                {
+                out.println("   <div class=\"alert alert-error fade in\">");
+                out.println("   <a class=\"close\" data-dismiss=\"alert\" href=\"#\">&times;</a>");
+                out.println("   <h4><p algin=\"center\" class=\"text-error\"> " + message + "</p></h4> ");
+                out.println("   </div>");
+                }
+                else
+                {
+                out.println("   <div class=\"alert alert-success fade in\">");
+                out.println("   <a class=\"close\" data-dismiss=\"alert\" href=\"#\">&times;</a>");
+                out.println("   <h4><p algin=\"center\" class=\"text-success\"> " + message + "</p></h4> ");
+                out.println("   </div>");
+                }     
+                out.println("</div>");     
+             }  
     
+    out.println("           <table class=\"table\"> <tbody>");
+    Iterator iter = products_list.iterator();
+            while(iter.hasNext())
+            {
+            Product tmp = (Product) iter.next();
+            out.println("<tr><td class=\"span3\"><img src=\""+ tmp.getImage_url() +"\" width=\"100\" height=\"100\" alt=\""+tmp.getProduct_name()+"\"></td>");
+            out.println("<td><a href=\"BuyerOrderController?op=request&product=" + tmp.getProduct_id() + "\">"
+                    + "<h5>"+ tmp.getProduct_name() +"</h5>"
+                    + "</a>Prezzo : <span style=\"color:red\">" + tmp.getPrice() + "</span>$");
+            out.println("<br>Disponibilità : " + tmp.getQuantity() +" " + tmp.getUm());
+            out.println("<br><p> <small> "+tmp.getDescription() +" </small></p>");
+            }     
+    out.println("           </tbody> </table> </div> </div> </div>");
+    out.println("   </body>");
+    out.println("</html>"); 
     }
     
     
+    public void printBuyerOrdersPage(PrintWriter out, ArrayList category_list , ArrayList orders_list)
+    {
+    out.println("<!DOCTYPE html>");
+    out.println("<html><head>");
+    out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+    out.println("<link href=\"/PrimoProgetto/Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
+    out.println("<script src=\"/PrimoProgetto/Bootstrap/js/jquery-1.8.2.js\"></script>");
+    out.println("<script src=\"/PrimoProgetto/Bootstrap/js/bootstrap.min.js\"></script>");
+    out.println("   <title>I miei ordini</title> </head> <body>");
+
+    this.printPageHeader(out, category_list);
+        
+    out.println("       <div class=\"span10\">");
+        if(orders_list.isEmpty()) {
+            out.println("<h3>Non ci sono ordini effettuati</h3>");
+        }
+    out.println("           <table class=\"table\"> <tbody>");
+    Iterator iter = orders_list.iterator();
+            while(iter.hasNext())
+            {
+            Order tmp = (Order) iter.next();
+            out.println("<tr><td class=\"span3\"><img src=\""+ tmp.getImage_url() +"\" width=\"100\" height=\"100\" alt=\""+tmp.getProduct_name()+"\"></td>");
+            out.println("<td class=\"span6\"><h4>"+ tmp.getProduct_name() +"</h4>"
+                    + "<strong>Ordinato in data : </strong>" + tmp.getOrder_date() + "<br>"
+                    + "<strong>Ordine : </strong>#"+tmp.getOrder_id()+"<br>"
+                    + "<strong>Venditore : </strong>" + tmp.getSeller_name()+ "</td>");
+            out.println("<td>"
+                    + "<strong><br>Prezzo: </strong>" + tmp.getPrice() + "$ * ");
+            out.println(tmp.getQuantity()+" "+tmp.getUm()+" <br>");
+            out.println("--------------------------------------------<br>");
+            out.println("<strong>Totale : </strong><span style=\"color:red\">" + tmp.getTotal_price() + "</span>$<br>"
+                    + "<strong>Fattura : </strong>link alla fattura</td></tr>");
+            }     
+    out.println("           </tbody> </table> </div> </div> </div>");
+    out.println("   </body>");
+    out.println("</html>");     
+      
+    }
+    
+    public void printBuyerOrderRequestPage(PrintWriter out , ArrayList category_list ,Product product)
+    {
+    out.println("<!DOCTYPE html>");
+    out.println("<html><head>");
+    out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+    out.println("<link href=\"/PrimoProgetto/Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
+    out.println("<script src=\"/PrimoProgetto/Bootstrap/js/jquery-1.8.2.js\"></script>");
+    out.println("<script src=\"/PrimoProgetto/Bootstrap/js/bootstrap.min.js\"></script>");
+    out.println("   <title>I miei ordini</title> </head> <body>");
+    
+    this.printPageHeader(out, category_list);
+    
+    
+    out.println("   </body>");
+    out.println("</html>"); 
+    }
+    
+    public void printBuyerOrderConfirmPage(PrintWriter out , ArrayList category_list ,Product product)
+    {
+    out.println("<!DOCTYPE html>");
+    out.println("<html><head>");
+    out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+    out.println("<link href=\"/PrimoProgetto/Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
+    out.println("<script src=\"/PrimoProgetto/Bootstrap/js/jquery-1.8.2.js\"></script>");
+    out.println("<script src=\"/PrimoProgetto/Bootstrap/js/bootstrap.min.js\"></script>");
+    out.println("   <title>I miei ordini</title> </head> <body>");
+    
+    this.printPageHeader(out, category_list);
+    
+    
+    out.println("   </body>");
+    out.println("</html>"); 
+    }
+    
+    
+    
+    
+    //Questo stampa solo l'header
+    private void printPageHeader(PrintWriter out , ArrayList category_list)
+    {
+    out.println("   <div class=\"row-fluid\">");
+    out.println("       <div class=\"span12 \">");
+    out.println("           <div class=\"row-fluid\">");
+    out.println("               <div class=\"span10\"><img src=\"/PrimoProgetto/Images/logo.jpg\" alt=\"logo\"> </div>");
+    out.println("   </div></div></div><br>");
+    out.println("<div class=\"container-fluid\">");
+    out.println("  	<div class=\"row-fluid\">");
+    out.println("           <div class=\"span2\" style=\"min-width:140px\">");
+    out.println("               <ul class=\"nav nav-list\">");
+    out.println("                   <li  ><a href=\"BuyerController?op=home\">Home</a></li>");
+    out.println("                   <li class=\"nav-header\">Il mio account</li>");
+    out.println("                   <li><a href=\"BuyerController?op=orders\">I miei ordini</a></li>");
+    out.println("                   <li><a href=\"/PrimoProgetto/LoginController?op=logout\">Logout</a></li>");
+    out.println("                   <li class=\"nav-header\">Categorie</li>");
+    Iterator iter = category_list.iterator();
+    while(iter.hasNext())
+            {
+            Category tmp = (Category) iter.next();
+            out.println("<li><a href=\"BuyerController?op=products&category="+tmp.getId()+"\">"+tmp.getName()+"</a></li>");
+            }    
+    out.println("		</ul></div>");
+    }
+    
+    
+    //Questo ritorna il nome della categoria del prodotto
+    private String printProductPageHeader(PrintWriter out , ArrayList category_list, int category_id)
+    {
+    out.println("   <div class=\"row-fluid\">");
+    out.println("       <div class=\"span12 \">");
+    out.println("           <div class=\"row-fluid\">");
+    out.println("               <div class=\"span10\"><img src=\"/PrimoProgetto/Images/logo.jpg\" alt=\"logo\"> </div>");
+    out.println("   </div></div></div><br>");
+    out.println("<div class=\"container-fluid\">");
+    out.println("  	<div class=\"row-fluid\">");
+    out.println("           <div class=\"span2\" style=\"min-width:140px\">");
+    out.println("               <ul class=\"nav nav-list\">");
+    out.println("                   <li  ><a href=\"BuyerController?op=home\">Home</a></li>");
+    out.println("                   <li class=\"nav-header\">Il mio account</li>");
+    out.println("                   <li><a href=\"BuyerController?op=orders\">I miei ordini</a></li>");
+    out.println("                   <li><a href=\"/PrimoProgetto/LoginController?op=logout\">Logout</a></li>");
+    out.println("                   <li class=\"nav-header\">Categorie</li>");
+    Iterator iter = category_list.iterator();
+    String result = null;
+    while(iter.hasNext())
+            {
+            Category tmp = (Category) iter.next();
+            if(category_id == tmp.getId()) {
+                    result = tmp.getName();
+                }
+            out.println("<li><a href=\"BuyerController?op=products&category="+tmp.getId()+"\">"+tmp.getName()+"</a></li>");
+            }    
+    out.println("		</ul></div>");
+        return result;
+    }
     
     
     
