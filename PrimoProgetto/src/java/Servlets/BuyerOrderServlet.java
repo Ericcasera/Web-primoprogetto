@@ -10,6 +10,7 @@ import Managers.HtmlManager;
 import Managers.PdfManager;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +46,7 @@ public class BuyerOrderServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         String op = request.getParameter("op");
         Product product = null;
+        ArrayList category_list = DbManager.queryCategory(this.getServletContext());
         
         if(op.equals(RequestPattern))
          
@@ -63,10 +65,12 @@ public class BuyerOrderServlet extends HttpServlet {
                 return;
             }
         session.setAttribute("order", product);
-        
+              
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
+            
+            HtmlManager.printBuyerOrderRequestPage(out, category_list , product);
 
         } finally {            
             out.close();

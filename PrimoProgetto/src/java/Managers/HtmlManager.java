@@ -234,21 +234,65 @@ public class HtmlManager {
       
     }
     
-    public void printBuyerOrderRequestPage(PrintWriter out , ArrayList category_list ,Product product)
+    public void printBuyerOrderRequestPage(PrintWriter out , ArrayList category_list , Product product)
     {
     out.println("<!DOCTYPE html>");
     out.println("<html><head>");
     out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
     out.println("<link href=\"/PrimoProgetto/Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
-    out.println("<script src=\"/PrimoProgetto/Bootstrap/js/jquery-1.8.2.js\"></script>");
-    out.println("<script src=\"/PrimoProgetto/Bootstrap/js/bootstrap.min.js\"></script>");
-    out.println("   <title>I miei ordini</title> </head> <body>");
+    out.println("<script type=\"text/javascript\">");
+    
+    out.println("function calculate(){");
+    out.println("   var num = parseInt(document.getElementById(\"number\").value);");
+    out.println("   var tot = num * "+product.getPrice()+";");
+    out.println("   document.getElementById(\"totale\").innerHTML = +tot ;");
+    out.println("   document.getElementById(\"update\").innerHTML = \"\";}"); 
+    
+    out.println("function check() {");
+    out.println("   var num = parseInt(document.getElementById(\"number\").value);");
+    out.println("   var max = "+product.getQuantity()+";");
+    out.println("if(num <=0 ) document.getElementById(\"number\").value = 1;");
+    out.println("else if(num >max) document.getElementById(\"number\").value = max;");
+    out.println("document.getElementById(\"update\").innerHTML = \"(aggiorna prezzo)\"; }");
+    
+    out.println("function validate(form){");
+    out.println("   if(document.getElementById(\"update\").innerHTML != \"\")");
+    out.println("   {"); 
+    out.println("           document.getElementById(\"messaggio\").innerHTML = \"*Devi aggiornare il prezzo prima di avanzare\"; ");
+    out.println("           return false;}");
+    out.println("    else return true;");
+    out.println("    }"); 
+    out.println("    </script> ");
+    
+    out.println("   <title>Carello</title> </head> <body>");
     
     this.printPageHeader(out, category_list);
-    
-    
-    out.println("   </body>");
-    out.println("</html>"); 
+    out.println("       <div class=\"span10\">");
+       out.println("           <table class=\"table\"> <tbody>");
+       out.println("<tr><td class=\"span5\"><img src=\""+ product.getImage_url() +"\" width=\"300\" height=\"300\" alt=\""+product.getProduct_name()+"\"></td>");
+       out.println("<td><p><h4>"+ product.getProduct_name() + "</h4>");   
+       out.println("<small>"+product.getDescription()+"</small><br>");
+       out.println("Venduto da : "+product.getSeller_name() + "<br>");
+       out.println("Prezzo : "+product.getPrice() + "$<br>");
+       out.println("Disponibili : "+product.getQuantity() + " " + product.getUm() + "<br>");
+       out.println("--------------------------------------------<br></p>");
+       out.println("Prezzo totale : <span style=\"color:red\" id=\"totale\">"+product.getPrice()+"</span>$"); 
+       out.println("                  &ensp;<span style=\"color:red\" id=\"messaggio\"></span><br></p>");
+       out.println("        <form action=\"BuyerOrderController?op=confirm\" onsubmit=\"return validate(this)\" method=\"post\">");          
+       out.println("        <div class=\"control-group\">");
+       out.println("            <span>Quantità</span>&ensp;<a href=\"#\" onclick=\"calculate(); return false\" id=\"update\"></a>");
+       out.println("                <div class=\"controls\">");
+       out.println("                <input class=\"input-small\" type=\"number\" id=\"number\" name=\"number\" value=\"1\" onchange=\"check()\">");
+       out.println("                </div>");
+       out.println("        </div>");  
+       out.println("        <div class=\"control-group\">");
+       out.println("            <div class=\"controls\">");
+       out.println("                <button class=\"btn\" type=\"submit\">Conferma ordina</button>");
+       out.println("            </div>");
+       out.println("        </div> </td></tr>");
+       out.println("           </tbody> </table> </div> </div> </div>");
+       out.println("   </body>");
+       out.println("</html>"); 
     }
     
     public void printBuyerOrderConfirmPage(PrintWriter out , ArrayList category_list ,Product product)
