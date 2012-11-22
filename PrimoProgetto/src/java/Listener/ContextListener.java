@@ -6,6 +6,7 @@ package Listener;
 
 import Managers.DBmanager;
 import Managers.HtmlManager;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
@@ -26,7 +27,8 @@ public class ContextListener implements ServletContextListener {
             DBurl = sce.getServletContext().getInitParameter("DBurl");
             DBdriver = sce.getServletContext().getInitParameter("DBdriver");
             sce.getServletContext().setAttribute("DbManager", new DBmanager(DBurl , DBdriver));
-            sce.getServletContext().setAttribute("HtmlManager", new HtmlManager());
+            sce.getServletContext().setAttribute("HtmlManager", new HtmlManager());           
+            ((new File(sce.getServletContext().getRealPath("Receipts")))).mkdir();           
         } catch (Exception ex) {
             Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
         }     

@@ -59,10 +59,10 @@ public class BuyerServlet extends HttpServlet {
         
         
         else if(op.equals(productsPattern))
-        {
-            String error = null;       
+        {  
             ArrayList products_list = null;
-            int type = 0;
+            String message;
+            int type;
             
             try{
               products_list = DbManager.queryProductsList(this.getServletContext(), Integer.parseInt(request.getParameter("category")));
@@ -71,12 +71,12 @@ public class BuyerServlet extends HttpServlet {
                 response.sendRedirect(redirectURL);
                 return;
                 }
-                   
             
+              
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();  
             try{     
-                HtmlManager.printBuyerProdcutsPage(out,  category_list, products_list, Integer.parseInt(request.getParameter("category")) ,  error, type);             
+                HtmlManager.printBuyerProdcutsPage(out,  category_list, products_list, Integer.parseInt(request.getParameter("category")));             
              } finally {            
              out.close();
              }
@@ -88,11 +88,20 @@ public class BuyerServlet extends HttpServlet {
             String id = session.getAttribute("user_id").toString();
             int user_id = Integer.parseInt(id);
             order_list = DbManager.queryBuyerOrders(this.getServletContext(), user_id);
+            String message;
+            int type;
+            
+            message = request.getParameter("message");
+            
+            try{
+                type = Integer.parseInt(request.getParameter("type"));
+                }
+                catch (NumberFormatException e){ type=0;}    
             
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();  
             try{
-                HtmlManager.printBuyerOrdersPage(out, category_list, order_list);
+                HtmlManager.printBuyerOrdersPage(out, category_list, order_list , message , type);
         } finally {            
             out.close();
         }  }    

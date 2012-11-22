@@ -26,7 +26,7 @@ public class BuyerOrderServlet extends HttpServlet {
     private HtmlManager HtmlManager;
     private DBmanager DbManager;
     private PdfManager PdfManager;
-    private String contextPath , RequestPattern , ConfirmPattern , ResponsePattern , redirectURL;
+    private String contextPath , RequestPattern , ConfirmPattern , ResponsePattern , redirectURL , CancelPattern;
     
     @Override
     public void init() throws ServletException {
@@ -37,7 +37,8 @@ public class BuyerOrderServlet extends HttpServlet {
             RequestPattern  = "request";
             ConfirmPattern  = "confirm";
             ResponsePattern = "response";
-            redirectURL = contextPath + "/BuyerController?op=home";
+            CancelPattern = "cancel";
+            redirectURL = contextPath + "/Buyer/BuyerController?op=home";
         } 
       
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -85,42 +86,54 @@ public class BuyerOrderServlet extends HttpServlet {
                  number = Integer.parseInt(request.getParameter("number"));          
                }
                 catch (NumberFormatException ex){
-                  response.sendRedirect(redirectURL);
+                  this.printErrorPage(response);
                   return;
                }  
           //Controllo che ci sia un prodotto da acquistare in sessione
-           product = (Product) session.getAttribute("order");
+           product = (Product) session.getAttribute("order");                    
            if(product == null)
             {
-                response.sendRedirect(redirectURL);
+                this.printErrorPage(response);
                 return;
             }
-           
-           
+                    
            product.setQuantity(number);
            session.setAttribute("order", product);
     
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-
+            HtmlManager.printBuyerOrderConfirmPage(out, category_list, product);
         } finally {            
             out.close();
         } 
         }
-        else
+        else if(op.equals(ResponsePattern))
         {
         product = (Product) session.getAttribute("order");
         
-        if(product == null)
+        String prec_op = request.getParameter("prec_op");
+                   
+           if(product == null)
             {
-                response.sendRedirect(redirectURL);
+                this.printErrorPage(response);
                 return;
-            }   
+            }
+           if(prec_op == null)
+           {
+               session.removeAttribute("order");
+               this.printErrorPage(response);
+               return;
+           }
+           
+        try{
+           PdfManager.buildPdf(this.getServletContext());
+        } catch (Exception e){}
         
         boolean result = false;
+        session.removeAttribute("order");
+        response.sendRedirect(contextPath + "/Buyer/BuyerController?op=orders&message=successo&type=1");        
         
-                
         //result = DbManager.queryInsertBuyOrder(product, Integer.parseInt(session.getAttribute("user_id").toString()));
         
         // boolean result = DbManager.queryUpdateProdcuts(product);
@@ -135,8 +148,37 @@ public class BuyerOrderServlet extends HttpServlet {
         */        
         
         }
+        else if(op.equals(CancelPattern))
+        {
+            product = (Product) session.getAttribute("order");   
+            
+            if(product == null)
+            {
+                this.printErrorPage(response);
+                return;
+            }
+        
+            int category_id = product.getCategory_id();
+        
+            session.removeAttribute("order");
+            response.sendRedirect(contextPath + "/Buyer/BuyerController?op=products&category="+category_id);
+        }
         
         
+    }
+    
+    private void printErrorPage(HttpServletResponse response) throws IOException
+    {
+
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        try {
+            
+            HtmlManager.printErrorPage(out, "BuyerHome", redirectURL, contextPath);
+            
+        } finally {            
+            out.close();
+        } 
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
