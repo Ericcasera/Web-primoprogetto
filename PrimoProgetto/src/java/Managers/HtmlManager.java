@@ -226,8 +226,8 @@ public class HtmlManager {
                     + "<strong><br>Prezzo: </strong>" + tmp.getPrice() + "$ * ");
             out.println(tmp.getQuantity()+" "+tmp.getUm()+" <br>");
             out.println("--------------------------------------------<br>");
-            out.println("<strong>Totale : <span style=\"color:red\">" + tmp.getTotal_price() + "</span></strong>$<br>"
-                    + "<strong>Fattura : </strong>link alla fattura</td></tr>");
+            out.println("<strong>Totale : <span style=\"color:red\">" + tmp.getTotal_price() + "</span></strong>$<br>");
+            out.println("<strong>Fattura : </strong><a href=\""+tmp.getReceipt_url()+"\" >Fattura</a></td></tr>");
             }     
     out.println("           </tbody> </table> </div> </div> </div>");
     out.println("   </body>");

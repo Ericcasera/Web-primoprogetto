@@ -174,7 +174,7 @@ private transient Connection con;
                     + "p.NAME as product_name , p.image_url as image_url , u.username as seller_name " 
                     + "from (orders o join products p on o.PRODUCT_ID = p.ID) join users u on seller_id = u.id " 
                     + "where o.BUYER_ID = ?"
-                    + "order by order_date";
+                    + "order by order_date desc";
             PreparedStatement stm = null ;
             ResultSet rs = null;
             ArrayList lista = new ArrayList(40);
@@ -193,7 +193,7 @@ private transient Connection con;
                     tmp.setSeller_name(rs.getString("seller_name"));
                     tmp.setProduct_name(rs.getString("product_name"));
                     tmp.setOrder_date(rs.getDate("order_date"));
-                    tmp.setReceipt_url(rs.getString("receipt_url"));
+                    tmp.setReceipt_url(contextPath + "/Receipts/" + rs.getString("receipt_url"));
                     tmp.setPrice(rs.getInt("price"));
                     tmp.setQuantity(rs.getInt("quantity"));
                     tmp.setTotal_price(rs.getInt("total_price"));
@@ -295,10 +295,10 @@ private transient Connection con;
         return false;
    }
     
-   public boolean queryInsertBuyOrder(Product product , int buyer_id){
+   public boolean queryInsertBuyOrder(Product product , int buyer_id , String sha1_name){
         
-            String query = " Insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order) "
-                             + "values (? , ? , ? , ? , ? , ? , ?)";
+            String query = " Insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order , receipt_url) "
+                             + "values (? , ? , ? , ? , ? , ? , ? , ?)";
             PreparedStatement stm = null ;
            
             try {        
@@ -310,7 +310,7 @@ private transient Connection con;
             stm.setInt(5, product.getPrice()); 
             stm.setInt(6, product.getPrice() * product.getQuantity());
             stm.setDate(7, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-            //Set receipt
+            stm.setString(8, sha1_name);
             int result = stm.executeUpdate();
             
             if(result == 0) {

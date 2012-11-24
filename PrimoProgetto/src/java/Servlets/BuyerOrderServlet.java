@@ -125,28 +125,21 @@ public class BuyerOrderServlet extends HttpServlet {
                this.printErrorPage(response);
                return;
            }
-           
-        try{
-           PdfManager.buildPdf(this.getServletContext());
-        } catch (Exception e){}
+          
+        String result = null;
+        session.removeAttribute("order");   
         
-        boolean result = false;
-        session.removeAttribute("order");
-        response.sendRedirect(contextPath + "/Buyer/BuyerController?op=orders&message=successo&type=1");        
+        if(DbManager.queryUpdateProdcuts(product)) {
+            
+                result = PdfManager.buildPdf(this.getServletContext() , product);
+                DbManager.queryInsertBuyOrder(product, Integer.parseInt(session.getAttribute("user_id").toString()), result);
+                response.sendRedirect(contextPath + "/Buyer/BuyerController?op=orders&message=Il tuo ordine e' stato completato con successo.&type=1");   
+            } 
+        else
+        {
+            response.sendRedirect(contextPath + "/Buyer/BuyerController?op=orders&message=Il tuo ordine non e' stato completato.&type=-1");
         
-        //result = DbManager.queryInsertBuyOrder(product, Integer.parseInt(session.getAttribute("user_id").toString()));
-        
-        // boolean result = DbManager.queryUpdateProdcuts(product);
-        /* if(result)
-         *      String sha1 = Pdfmanager.createRecepit();
-         *      insertOrder (product , sha1);
-         *      sessionRemove(order);
-         *      sendRedirect : (products , success , category_id);
-        *   else    
-        *       sessionRemove(Order);
-        *       sendRedirect : (prodcuts , error , category_id);
-        */        
-        
+        }
         }
         else if(op.equals(CancelPattern))
         {
