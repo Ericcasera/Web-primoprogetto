@@ -130,9 +130,9 @@ public class BuyerOrderServlet extends HttpServlet {
         session.removeAttribute("order");   
         
         if(DbManager.queryUpdateProdcuts(product)) {
-            
-                result = PdfManager.buildPdf(this.getServletContext() , product);
-                DbManager.queryInsertBuyOrder(product, Integer.parseInt(session.getAttribute("user_id").toString()), result);
+                int order_id = DbManager.queryInsertBuyOrder(product, Integer.parseInt(session.getAttribute("user_id").toString()));
+                String receipt_path = PdfManager.buildReceipt(this.getServletContext() , product , session.getAttribute("user").toString() , order_id);
+                DbManager.queryInsertReceipt(order_id, receipt_path);     
                 response.sendRedirect(contextPath + "/Buyer/BuyerController?op=orders&message=Il tuo ordine e' stato completato con successo.&type=1");   
             } 
         else

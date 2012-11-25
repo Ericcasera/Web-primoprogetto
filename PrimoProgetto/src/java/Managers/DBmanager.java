@@ -295,10 +295,10 @@ private transient Connection con;
         return false;
    }
     
-   public boolean queryInsertBuyOrder(Product product , int buyer_id , String sha1_name){
+   public int queryInsertBuyOrder(Product product , int buyer_id){
         
-            String query = " Insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order , receipt_url) "
-                             + "values (? , ? , ? , ? , ? , ? , ? , ?)";
+            String query = " Insert into orders (buyer_id , product_id , um , quantity , price , total_price , date_order) "
+                             + "values (? , ? , ? , ? , ? , ? , ?)";
             PreparedStatement stm = null ;
            
             try {        
@@ -310,14 +310,13 @@ private transient Connection con;
             stm.setInt(5, product.getPrice()); 
             stm.setInt(6, product.getPrice() * product.getQuantity());
             stm.setDate(7, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-            stm.setString(8, sha1_name);
             int result = stm.executeUpdate();
             
             if(result == 0) {
-                    return false;
+                    return -1;
                 }
             else {
-                    return true;
+                    return queryLastOrder(buyer_id);
                 }          
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
@@ -331,7 +330,60 @@ private transient Connection con;
                  }
             }
             
-            return false;
+            return -1;
    }
+   
+   private int queryLastOrder(int buyer_id)
+        {
+            String query = "Select max(id) as last_order from orders where buyer_id = ? ";
+            PreparedStatement stm = null ;
+            ResultSet rs = null;
+            
+            try {     
+            stm = con.prepareStatement(query);
+            stm.setInt(1, buyer_id);
+            rs = stm.executeQuery();
+            if(rs.next())
+                {
+                    return Integer.parseInt(rs.getString("last_order"));
+                }       
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+        }
+        finally {
+                try{     
+                   stm.close();   
+                 }
+                 catch (Exception ex) {
+                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+                 }
+            }
+            
+        return -1;
+     
+     }
+   
+     public void queryInsertReceipt(int order_id , String receipt_path)
+     { 
+            String query = " Update orders set Receipt_url = ? where id = ? " ;
+            PreparedStatement stm = null ;
+           
+            try {        
+            stm = con.prepareStatement(query);
+            stm.setString(1, receipt_path);
+            stm.setInt(2, order_id);
+            stm.executeUpdate();        
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+        }
+        finally {
+                try{       
+                   stm.close();   
+                 }
+                 catch (Exception ex) {
+                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+                 }
+            }
+   }        
        
 }

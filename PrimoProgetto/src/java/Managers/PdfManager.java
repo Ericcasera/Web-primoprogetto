@@ -5,9 +5,11 @@
 package Managers;
 
 import Beans.Product;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
-import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.BufferedInputStream;
@@ -16,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
+import java.util.Calendar;
 import java.util.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,20 +61,74 @@ public class PdfManager {
         return formatter.toString();
     }
     
+    private void buildPdf(Document document , Product product , String buyer_name , int order_id)
+    {  
+      Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+      Font normalFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL);
+      Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+      Font smallRedBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD , BaseColor.RED);
+      
+      try{
+            
+      //Titolo
+      Paragraph title = new Paragraph("Fattura ordine #"+order_id , titleFont);
+      addEmptyLine(title, 3);
+      title.setAlignment(Element.ALIGN_CENTER);
+      document.add(title);
+      
+      //Corpo
+      Paragraph body = new Paragraph();
+      body.add(new Chunk("Ordinato in data    : " , smallBold));
+      body.add(new Chunk(""+new java.sql.Date(Calendar.getInstance().getTimeInMillis()) +"\n" , normalFont)); 
+      
+      body.add(new Chunk("Ordine eseguito da  : " , smallBold));
+      body.add(new Chunk(""+ buyer_name +"\n" , normalFont)); 
+      
+      body.add(new Chunk("Codice prodotto     : #" , smallBold));
+      body.add(new Chunk(""+product.getProduct_id()+"\n" , normalFont));
+      
+      body.add(new Chunk("Nome prodotto       : " , smallBold));
+      body.add(new Chunk(""+product.getProduct_name()+"\n" , normalFont));
+      
+      body.add(new Chunk("Prodotto venduto da : " , smallBold));
+      body.add(new Chunk(""+product.getSeller_name()+"\n" , normalFont));
+      
+      body.add(new Chunk("------------------------------------------------------------------------------\n" , normalFont));
+      
+      body.add(new Chunk("Quantità acquistata : " , smallBold));
+      body.add(new Chunk(""+product.getQuantity()+" " , normalFont));
+      body.add(new Chunk(""+product.getUm()+"\n" , normalFont));
+      
+      body.add(new Chunk("Prezzo              : ", smallBold));
+      body.add(new Chunk(""+product.getPrice()+"$\n\n" , normalFont));
+      
+      body.add(new Chunk("Prezzo totale       : " , smallBold));
+      body.add(new Chunk(""+product.getPrice()*product.getQuantity() , smallRedBold));    
+      body.add(new Chunk("$\n\n" , normalFont)); 
+      
+      body.setAlignment(Element.ALIGN_LEFT);
+      document.add(body);
+      
+      }catch(Exception e){
+        Logger.getLogger(PdfManager.class.getName()).log(Level.SEVERE, null, e);
+      }
+
+    }
     
-    public String buildPdf(ServletContext context , Product product){ 
+    
+    public String buildReceipt(ServletContext context , Product product , String buyer_name , int order_id){ 
            
         String path = context.getRealPath("Receipts/"+product.getProduct_id()+"_"+product.getProduct_name()+".pdf");
         Document document = new Document();
         
         try{
         
-            PdfWriter.getInstance(document, new FileOutputStream(path));
+        PdfWriter.getInstance(document, new FileOutputStream(path));
         document.open();
-        Paragraph p = new Paragraph("Ciao sono il prodotto" + product.getProduct_name() + " venduto da " +product.getSeller_name() , FontFactory.getFont(FontFactory.HELVETICA,18));
-        p.setAlignment(Element.ALIGN_CENTER);
-        document.add(p);
-        document.close(); 
+        
+        buildPdf(document , product , buyer_name , order_id);
+        
+        document.close();  
         String sha1 = Sha1Name(path);
       
         if(sha1 != null)
@@ -83,22 +140,16 @@ public class PdfManager {
               
         return sha1 + ".pdf";
         
-        }catch(Exception e){
-            
+        }catch(Exception e){         
         Logger.getLogger(PdfManager.class.getName()).log(Level.SEVERE, null, e);
-        return null;
-        
-        }                    
-    }
-
-    public String savePdf(){ 
-        //Questo metodo passati i dati , richiama build pdf e salva il pdf con codice sha-1 
-        //E ritorna il codice cosicche si possa salvarlo nel database
-        return null;
+        return null; }                    
     }
     
-
-    
+   private static void addEmptyLine(Paragraph paragraph, int number) {
+    for (int i = 0; i < number; i++) {
+      paragraph.add(new Paragraph(" "));
+    }
+  }
     
     
     
