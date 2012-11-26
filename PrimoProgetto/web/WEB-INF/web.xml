@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <error-page>
+        <error-code>404</error-code>
+        <location>/ErrorPage.html</location>
+    </error-page>
     <filter>
         <filter-name>BuyerFilter</filter-name>
         <filter-class>Filters.BuyerFilter</filter-class>
@@ -64,6 +68,10 @@
         <servlet-name>BuyerBuyOrder</servlet-name>
         <servlet-class>Servlets.BuyerOrderServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ShowImage</servlet-name>
+        <servlet-class>Servlets.ShowImage</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -79,6 +87,10 @@
     <servlet-mapping>
         <servlet-name>BuyerBuyOrder</servlet-name>
         <url-pattern>/Buyer/BuyerOrderController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ShowImage</servlet-name>
+        <url-pattern>/ShowImage</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
