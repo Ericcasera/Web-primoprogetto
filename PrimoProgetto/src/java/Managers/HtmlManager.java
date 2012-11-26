@@ -32,7 +32,7 @@ public class HtmlManager {
            out.println("<body>");
            out.println("<div class=\"login well\">");
            out.println("    <div class=\"login-title\">");
-           out.println("        <h4>Benvenuti a \"vendo piante\" , prego loggarsi</h4><br>");
+           out.println("        <h4>Benvenuti in Trento Ortofrutticola</h4><br>");
            out.println("    </div>");         
            out.println("        <form action=\"LoginController?op=login\" method=\"post\" class=\"form-horizontal\">");          
            out.println("        <div class=\"control-group\">");
