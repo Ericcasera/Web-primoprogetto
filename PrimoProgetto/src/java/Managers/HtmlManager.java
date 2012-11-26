@@ -341,7 +341,7 @@ public class HtmlManager {
     out.println("   <div class=\"row-fluid\">");
     out.println("       <div class=\"span12 \">");
     out.println("           <div class=\"row-fluid\">");
-    out.println("               <div class=\"span10\"><img src=\"/PrimoProgetto/Images/logo.jpg\" alt=\"logo\"> </div>");
+    out.println("               <div class=\"span10\"><img src=\"/PrimoProgetto/Images-site/logo.jpg\" alt=\"logo\"> </div>");
     out.println("   </div></div></div><br>");
     out.println("<div class=\"container-fluid\">");
     out.println("  	<div class=\"row-fluid\">");
@@ -368,7 +368,7 @@ public class HtmlManager {
     out.println("   <div class=\"row-fluid\">");
     out.println("       <div class=\"span12 \">");
     out.println("           <div class=\"row-fluid\">");
-    out.println("               <div class=\"span10\"><img src=\"/PrimoProgetto/Images/logo.jpg\" alt=\"logo\"> </div>");
+    out.println("               <div class=\"span10\"><img src=\"/PrimoProgetto/Images-site/logo.jpg\" alt=\"logo\"> </div>");
     out.println("   </div></div></div><br>");
     out.println("<div class=\"container-fluid\">");
     out.println("  	<div class=\"row-fluid\">");
