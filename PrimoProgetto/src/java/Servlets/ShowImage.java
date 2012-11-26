@@ -57,7 +57,7 @@ public class ShowImage extends HttpServlet {
             out.println("<div class=\"container\">");
             out.println("   <center><div id=\"form_div\" >");
             out.println("               <a href=\"#\" id=\"select_image\" onClick=\"return false;\">");  
-            out.println("               <img id=\"image_preview\" src=\"...\" width=\"150px;\" height=\"150px;\" class=\"img-polaroid\"><br>");
+            out.println("               <img id=\"image_preview\" src=\"Images-site/immagine_vuota.jpg\" width=\"150px;\" height=\"150px;\" class=\"img-polaroid\"><br>");
             out.println("               </a>");
             out.println("       <form action=\"#\" method=\"get\">");
             out.println("           Attributo 1<input type=\"text\" > <br>");
