@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <error-page>
@@ -98,3 +99,102 @@
         </session-timeout>
     </session-config>
 </web-app>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <filter>
+        <filter-name>BuyerFilter</filter-name>
+        <filter-class>Filters.BuyerFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>SellerFilter</filter-name>
+        <filter-class>Filters.SellerFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>Filters.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/Login</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/index.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>BuyerFilter</filter-name>
+        <url-pattern>/Buyer/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>SellerFilter</filter-name>
+        <url-pattern>/Seller/*</url-pattern>
+    </filter-mapping>
+    <listener>
+        <description>ServletContextListener</description>
+        <listener-class>Listener.ContextListener</listener-class>
+    </listener>
+    <context-param>
+        <param-name>
+           DBurl 
+        </param-name>
+        <param-value>
+            jdbc:derby://localhost:1527/PrimoProgetto;user=database;password=database
+        </param-value>
+    </context-param>
+    <context-param>
+        <param-name>
+           DBdriver 
+        </param-name>
+        <param-value>
+            org.apache.derby.jdbc.ClientDriver  
+        </param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>Servlets.LoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BuyerServlet</servlet-name>
+        <servlet-class>Servlets.BuyerServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SellerServlet</servlet-name>
+        <servlet-class>Servlets.SellerServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BuyerBuyOrder</servlet-name>
+        <servlet-class>Servlets.BuyerOrderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SellerAddServlet</servlet-name>
+        <servlet-class>Servlets.SellerAddServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LoginController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BuyerServlet</servlet-name>
+        <url-pattern>/Buyer/BuyerController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SellerServlet</servlet-name>
+        <url-pattern>/Seller/SellerController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BuyerBuyOrder</servlet-name>
+        <url-pattern>/Buyer/BuyerOrderController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SellerAddServlet</servlet-name>
+        <url-pattern>/Seller/SellerAddController</url-pattern>
+    </servlet-mapping>
+    
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+</web-app>
+>>>>>>> lotto seller aggiunta tu
