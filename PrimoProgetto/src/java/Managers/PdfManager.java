@@ -10,8 +10,13 @@ import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.DottedLineSeparator;
+import com.itextpdf.text.pdf.draw.LineSeparator;
+import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,24 +66,40 @@ public class PdfManager {
         return formatter.toString();
     }
     
-    private void buildPdf(Document document , Product product , String buyer_name , int order_id)
+    private void buildPdf(Document document , Product product , String buyer_name , int order_id , ServletContext context)
     {  
-      Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
-      Font normalFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL);
-      Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
-      Font smallRedBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD , BaseColor.RED);
+      Font titleFont = FontFactory.getFont(FontFactory.HELVETICA, 13, Font.BOLD);
+      Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 11, Font.NORMAL);
+      Font smallBold = FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD);
+      Font smallRedBold = FontFactory.getFont(FontFactory.HELVETICA, 11, Font.BOLD, BaseColor.BLUE);
+      
+      LineSeparator separator = new LineSeparator(0.5f, 100, BaseColor.DARK_GRAY, Element.ALIGN_CENTER, -2);
+      
+      //Tabulazioni
+      Chunk tab = new Chunk(new DottedLineSeparator(), 450, true);
       
       try{
-            
-      //Titolo
-      Paragraph title = new Paragraph("Fattura ordine #"+order_id , titleFont);
-      addEmptyLine(title, 3);
-      title.setAlignment(Element.ALIGN_CENTER);
-      document.add(title);
+          
+      //Logo
+      Image logo = Image.getInstance(context.getRealPath("/Images-site/logo_login.png"));
+      logo.scalePercent(50f);
+      document.add(logo);
+      document.add(new Chunk(separator));
       
       //Corpo
       Paragraph body = new Paragraph();
-      body.add(new Chunk("Ordinato in data    : " , smallBold));
+      
+      Image image = Image.getInstance(context.getRealPath("/Images/banana.jpg"));
+      image.scaleToFit(200f,200f);
+      image.setAlignment(Image.TEXTWRAP);
+      body.add(image);
+      
+      //Titolo
+      body.add(new Chunk("\nFattura ordine #"+order_id , titleFont));
+      body.add(Chunk.NEWLINE);
+      
+      //Dati
+      body.add(new Chunk("\nOrdinato in data    : " , smallBold));
       body.add(new Chunk(""+new java.sql.Date(Calendar.getInstance().getTimeInMillis()) +"\n" , normalFont)); 
       
       body.add(new Chunk("Ordine eseguito da  : " , smallBold));
@@ -93,21 +114,37 @@ public class PdfManager {
       body.add(new Chunk("Prodotto venduto da : " , smallBold));
       body.add(new Chunk(""+product.getSeller_name()+"\n" , normalFont));
       
-      body.add(new Chunk("------------------------------------------------------------------------------\n" , normalFont));
+      //Prezzo
+      body.add(Chunk.NEWLINE);
+      body.add(Chunk.NEWLINE);
+      body.add(Chunk.NEWLINE);
+      body.add(Chunk.NEWLINE);
+      
+      body.add(new Chunk("Riepilogo:\n" , titleFont));
+      
+      body.add(Chunk.NEWLINE);
       
       body.add(new Chunk("Quantità acquistata : " , smallBold));
       body.add(new Chunk(""+product.getQuantity()+" " , normalFont));
       body.add(new Chunk(""+product.getUm()+"\n" , normalFont));
       
       body.add(new Chunk("Prezzo              : ", smallBold));
-      body.add(new Chunk(""+product.getPrice()+"$\n\n" , normalFont));
+      body.add(new Chunk(tab));
+      body.add(new Chunk(""+product.getPrice()+"$\n" , normalFont));
       
-      body.add(new Chunk("Prezzo totale       : " , smallBold));
-      body.add(new Chunk(""+product.getPrice()*product.getQuantity() , smallRedBold));    
-      body.add(new Chunk("$\n\n" , normalFont)); 
+      body.add(new Chunk(separator));
       
       body.setAlignment(Element.ALIGN_LEFT);
       document.add(body);
+      
+      Paragraph price = new Paragraph();
+      
+      price.add(new Chunk("Prezzo totale       : " , smallBold));
+      price.add(new Chunk(""+product.getPrice()*product.getQuantity() , smallRedBold));    
+      price.add(new Chunk("$\n\n" , normalFont));
+      
+      price.setAlignment(Element.ALIGN_RIGHT);
+      document.add(price);
       
       }catch(Exception e){
         Logger.getLogger(PdfManager.class.getName()).log(Level.SEVERE, null, e);
@@ -126,7 +163,7 @@ public class PdfManager {
         PdfWriter.getInstance(document, new FileOutputStream(path));
         document.open();
         
-        buildPdf(document , product , buyer_name , order_id);
+        buildPdf(document , product , buyer_name , order_id , context);
         
         document.close();  
         String sha1 = Sha1Name(path);

@@ -16,7 +16,10 @@
     <body>       
         <div class="login well">
             <div class="login-title" >
-                <h4>Benvenuti a "vendo piante" , prego loggarsi</h4>
+                <br>
+                <img src="/PrimoProgetto/Images-site/logo_login.png">
+                <br>
+                <br>
                 <br>
             </div>
             

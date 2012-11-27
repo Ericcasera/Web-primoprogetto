@@ -32,7 +32,7 @@ public class HtmlManager {
            out.println("<body>");
            out.println("<div class=\"login well\">");
            out.println("    <div class=\"login-title\">");
-           out.println("        <h4>Benvenuti in Trento Ortofrutticola</h4><br>");
+           out.println("        <br><img src=\"/PrimoProgetto/Images-site/logo_login.png\"><br><br><br>");
            out.println("    </div>");         
            out.println("        <form action=\"LoginController?op=login\" method=\"post\" class=\"form-horizontal\">");          
            out.println("        <div class=\"control-group\">");
@@ -289,7 +289,7 @@ public class HtmlManager {
        out.println("        </div>");  
        out.println("        <div class=\"control-group\">");
        out.println("            <div class=\"controls\">");
-       out.println("                <button class=\"btn\" type=\"submit\">Conferma ordina</button>");
+       out.println("                <button class=\"btn\" type=\"submit\">Conferma ordine</button>");
        out.println("                <a type=\"button\" class=\"btn\" href=\"BuyerController?op=products&category="+product.getCategory_id()+"\">Annulla ordine</a>");
        out.println("            </div>");
        out.println("        </div> </td></tr>");

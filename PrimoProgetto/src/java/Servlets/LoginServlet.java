@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
                     {
                         session.invalidate();
                     }
-                    request.setAttribute("message", "Login effettuato con successo");
+                    request.setAttribute("message", "Logout effettuato con successo");
                     request.getRequestDispatcher("LoginController?op=login").forward(request, response);
                     return;
         }
@@ -61,7 +61,7 @@ public class LoginServlet extends HttpServlet {
         return;
         } 
         
-        //Caso che arrivo avento premuto il tasto login
+        //Caso che arrivo avendo premuto il tasto login
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
@@ -72,7 +72,7 @@ public class LoginServlet extends HttpServlet {
                 if(tmp == null) {        
                     response.setContentType("text/html;charset=UTF-8");
                     PrintWriter out = response.getWriter();      
-                    HtmlManager.printLoginPage(out, "Errore di autenticazione , Username o Password errati" , -1);      
+                    HtmlManager.printLoginPage(out, "Errore di autenticazione, Username o Password errati" , -1);      
                     out.close();
                 }    
                 else
