@@ -72,6 +72,10 @@
         <servlet-name>ShowImage</servlet-name>
         <servlet-class>Servlets.ShowImage</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SellerAddServlet</servlet-name>
+        <servlet-class>Servlets.SellerAddServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginController</url-pattern>
@@ -83,6 +87,10 @@
     <servlet-mapping>
         <servlet-name>SellerServlet</servlet-name>
         <url-pattern>/Seller/SellerController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SellerAddServlet</servlet-name>
+        <url-pattern>/Seller/SellerAddController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>BuyerBuyOrder</servlet-name>

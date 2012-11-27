@@ -351,19 +351,17 @@ private transient Connection con;
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
         }
         finally {
-                try{     
+                try{           
                    stm.close();   
                  }
                  catch (Exception ex) {
                      Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
                  }
-            }
-            
-        return -1;
-     
+            }           
+        return -1;    
      }
    
-     public void queryInsertReceipt(int order_id , String receipt_path)
+ public void queryInsertReceipt(int order_id , String receipt_path)
      { 
             String query = " Update orders set Receipt_url = ? where id = ? " ;
             PreparedStatement stm = null ;
@@ -384,6 +382,143 @@ private transient Connection con;
                      Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
                  }
             }
-   }        
-       
-}
+   } 
+   
+   
+    public ArrayList querySellerOrders(ServletContext context , int seller_id){
+    
+            String query = "Select o.id as order_id , o.UM as um , o.QUANTITY as quantity , o.PRICE as price ,"
+                    + "o.TOTAL_PRICE as total_price , o.DATE_ORDER as order_date , o.RECEIPT_URL as receipt_url, "
+                    + "p.NAME as product_name , p.image_url as image_url , u.username as seller_name, us.username as buyer_name  " 
+                    + "from ((orders o join products p on o.PRODUCT_ID = p.ID) join users u on seller_id = u.id) join users us on buyer_id = us.id " 
+                    + "where p.seller_id = ?"
+                    + "order by order_date desc";
+            PreparedStatement stm = null ;
+            ResultSet rs = null;
+            ArrayList lista = new ArrayList(40);
+            Order tmp;
+            String contextPath = context.getContextPath();
+            
+            try {        
+            stm = con.prepareStatement(query);
+            stm.setInt(1, seller_id);
+            rs = stm.executeQuery();
+            
+            while(rs.next())
+                {
+                    tmp = new Order();
+                    tmp.setOrder_id(rs.getInt("order_id"));
+                    tmp.setSeller_name(rs.getString("seller_name"));
+                    tmp.setBuyer_name(rs.getString("buyer_name"));
+                    tmp.setProduct_name(rs.getString("product_name"));
+                    tmp.setOrder_date(rs.getDate("order_date"));
+                    tmp.setReceipt_url(contextPath + "/Receipts/" + rs.getString("receipt_url"));
+                    tmp.setPrice(rs.getInt("price"));
+                    tmp.setQuantity(rs.getInt("quantity"));
+                    tmp.setTotal_price(rs.getInt("total_price"));
+                    tmp.setImage_url(contextPath + "/Images/" + rs.getString("image_url"));
+                    tmp.setUm(rs.getString("um"));
+                    lista.add(tmp);  
+                } 
+                   rs.close(); 
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+        }
+        finally {
+                try{       
+                   stm.close();   
+                 }
+                 catch (Exception ex) {
+                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+                 }
+            }
+            
+        return lista;
+    }
+   
+
+public boolean queryInsertNewProduct(Product product, int seller_id){
+        
+            String query = " Insert into products (seller_id , category_id , description , NAME , image_url , um , quantity , price, date_order) "
+                             + "values (? , ? , ? , ? , ? , ? , ? , ?, ?)";
+            
+        PreparedStatement stm = null ;
+           
+            try {        
+            stm = con.prepareStatement(query);
+
+            stm.setInt(1, seller_id);
+            stm.setInt(2, product.getCategory_id());
+            stm.setString(3, product.getDescription());
+            stm.setString(4, product.getProduct_name());
+            stm.setString(5, product.getImage_url()); 
+            stm.setString(6, product.getUm());
+            stm.setInt(7, product.getQuantity());
+            stm.setInt(8, product.getPrice());
+            stm.setDate(9, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
+            int result = stm.executeUpdate();
+            
+            if(result == 0) {
+                    return false;
+                }
+            else {
+                    return true;
+                }          
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+        }
+        finally {
+                try{       
+                   stm.close();   
+                 }
+                 catch (Exception ex) {
+                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+                 }
+                }     
+        return false;
+    }
+
+
+   public ArrayList querySell(ServletContext context , int Seller_id){
+    
+            String query = "Select * from products where seller_id = ? ";
+            PreparedStatement stm = null ;
+            ResultSet rs = null;
+            ArrayList lista = new ArrayList(40);
+            Product tmp;
+            String contextPath = context.getContextPath();
+            
+            try {        
+            stm = con.prepareStatement(query);
+            stm.setInt(1, Seller_id);
+            rs = stm.executeQuery();
+            
+            while(rs.next())
+                {
+                    tmp = new Product();
+                    tmp.setProduct_id(rs.getInt("id"));
+                    tmp.setPrice(rs.getInt("price"));
+                    tmp.setCategory_id(rs.getInt("category_id"));
+                    tmp.setQuantity(rs.getInt("quantity"));
+                    tmp.setProduct_name(rs.getString("name"));
+                    tmp.setDescription(rs.getString("description"));
+                    tmp.setImage_url(contextPath + "/Images/" + rs.getString("image_url"));
+                    tmp.setUm(rs.getString("um"));
+                    lista.add(tmp);
+                    
+                } 
+                   rs.close();
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+        }
+        finally {
+                try{       
+                   stm.close();   
+                 }
+                 catch (Exception ex) {
+                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null , ex);
+                 }
+                }
+            return lista;
+   }
+}  
