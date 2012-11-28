@@ -26,8 +26,8 @@ public class ContextListener implements ServletContextListener {
             String DBurl , DBdriver;
             DBurl = sce.getServletContext().getInitParameter("DBurl");
             DBdriver = sce.getServletContext().getInitParameter("DBdriver");
-            sce.getServletContext().setAttribute("DbManager", new DBmanager(DBurl , DBdriver));
-            sce.getServletContext().setAttribute("HtmlManager", new HtmlManager());           
+            sce.getServletContext().setAttribute("DbManager", new DBmanager(DBurl , DBdriver , sce.getServletContext()));
+            sce.getServletContext().setAttribute("HtmlManager", new HtmlManager(sce.getServletContext()));           
             ((new File(sce.getServletContext().getRealPath("Receipts")))).mkdir();           
         } catch (Exception ex) {
             Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);

@@ -43,7 +43,7 @@ public class BuyerServlet extends HttpServlet {
             throws ServletException, IOException {  
          
         HttpSession session = request.getSession(false);
-        ArrayList category_list = DbManager.queryCategory(this.getServletContext());
+        ArrayList category_list = DbManager.queryCategory();
         String op = request.getParameter("op");
         
         if(op.equals(homePattern))
@@ -61,11 +61,9 @@ public class BuyerServlet extends HttpServlet {
         else if(op.equals(productsPattern))
         {  
             ArrayList products_list = null;
-            String message;
-            int type;
-            
+
             try{
-              products_list = DbManager.queryProductsList(this.getServletContext(), Integer.parseInt(request.getParameter("category")));
+              products_list = DbManager.queryProductsList(Integer.parseInt(request.getParameter("category")));
                 }
                 catch (NumberFormatException e){
                 response.sendRedirect(redirectURL);
@@ -87,7 +85,7 @@ public class BuyerServlet extends HttpServlet {
             ArrayList order_list = null;
             String id = session.getAttribute("user_id").toString();
             int user_id = Integer.parseInt(id);
-            order_list = DbManager.queryBuyerOrders(this.getServletContext(), user_id);
+            order_list = DbManager.queryBuyerOrders(user_id);
             String message;
             int type;
             

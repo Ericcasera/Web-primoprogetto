@@ -23,7 +23,7 @@ public class SellerServlet extends HttpServlet {
 
     private HtmlManager HtmlManager;
     private DBmanager DbManager;
-    private String contextPath , homePattern , addProductPattern , productsPattern, myStorePattern;
+    private String contextPath , homePattern , addProductPattern  , productsPattern, myStorePattern;
     private String redirectURL;
     
     @Override
@@ -31,8 +31,8 @@ public class SellerServlet extends HttpServlet {
             this.DbManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
             this.HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
             this.contextPath = this.getServletContext().getContextPath();
+            this.addProductPattern  = "addProduct";
             this.homePattern = "home";
-            this.addProductPattern = "addProduct";
             this.productsPattern = "products";
             this.myStorePattern= "myStore";
             this.redirectURL = contextPath + "/Seller/SellerController?op=home";
@@ -40,15 +40,18 @@ public class SellerServlet extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         HttpSession session = request.getSession(false);
-        ArrayList category_list = DbManager.queryCategory(this.getServletContext());
-        String id = session.getAttribute("user_id").toString();
+        ArrayList category_list = DbManager.queryCategory();
+        String id = session.getAttribute("user_id").toString(); 
         int user_id = Integer.parseInt(id);
-        ArrayList sell_list = DbManager.querySell(this.getServletContext(), user_id);
-        ArrayList sell_order_list = DbManager.querySellerOrders(this.getServletContext(), user_id);
+        
         String op = request.getParameter("op");
         
         if(op.equals(homePattern)){
+            
+            ArrayList sell_order_list = DbManager.querySellerOrders(user_id);
+
             response.setContentType("text/html;charset=UTF-8");
             PrintWriter out = response.getWriter();      
             try {
@@ -60,11 +63,9 @@ public class SellerServlet extends HttpServlet {
     
         else if(op.equals(productsPattern)){  
             ArrayList products_list = null;
-            String message;
-            int type;
-            
+
             try{
-              products_list = DbManager.queryProductsList(this.getServletContext(), Integer.parseInt(request.getParameter("category")));
+              products_list = DbManager.queryProductsList(Integer.parseInt(request.getParameter("category")));
             }
             catch (NumberFormatException e){
               response.sendRedirect(redirectURL);
@@ -80,43 +81,40 @@ public class SellerServlet extends HttpServlet {
               }
         }
         
-        else if(op.equals(addProductPattern)){     
-            String message;
-            int type;
+        else if(op.equals(myStorePattern)){     
+
+        ArrayList sell_list = DbManager.querySell(user_id);
+         
+        String message;
+        int type;
             
-            message = request.getParameter("message");
+        message = request.getParameter("message");
             
-            try{
-                type = Integer.parseInt(request.getParameter("type"));
-                }
-                catch (NumberFormatException e){ type=0;}    
-            
+        try{
+           type = Integer.parseInt(request.getParameter("type"));
+           }
+           catch (NumberFormatException e){ type=0;} 
+   
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();  
             try{
-                HtmlManager.printAddProductPage(out, category_list); 
+                HtmlManager.printSellerStorePage(out, category_list, sell_list , message , type); 
         } finally {            
             out.close();
         }  }
         
-        else if(op.equals(myStorePattern)){     
-            String message;
-            int type;
-            
-            message = request.getParameter("message");
-            
-            try{
-                type = Integer.parseInt(request.getParameter("type"));
-                }
-                catch (NumberFormatException e){ type=0;}    
-            
+        else if(op.equals(addProductPattern)){
+        
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();  
             try{
-                HtmlManager.printMyStorePage(out, category_list, sell_list); 
+                HtmlManager.printSellerAddProductPage(out, category_list);
         } finally {            
             out.close();
-        }  }
+        }
+        
+        
+        }
         
         
     

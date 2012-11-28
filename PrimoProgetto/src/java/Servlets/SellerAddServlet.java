@@ -24,17 +24,16 @@ public class SellerAddServlet extends HttpServlet {
 
     private HtmlManager HtmlManager;
     private DBmanager DbManager;
-    private String contextPath , ConfirmPattern , ResponsePattern , redirectURL , CancelPattern, ControllPattern;
+    private String contextPath , ResponsePattern , redirectURL , CancelPattern, ConfirmPattern;
     
     @Override
     public void init() throws ServletException {
             DbManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
             HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
             contextPath = this.getServletContext().getContextPath();
-            ConfirmPattern  = "confirm";
             ResponsePattern = "response";
             CancelPattern = "cancel";
-            ControllPattern="controll";
+            ConfirmPattern="confirm";
             redirectURL = contextPath + "/Seller/SellerController?op=home";
         } 
       
@@ -43,70 +42,48 @@ public class SellerAddServlet extends HttpServlet {
         
         HttpSession session = request.getSession(false);
         String op = request.getParameter("op");
-        Product product = new Product();
-        ArrayList category_list = DbManager.queryCategory(this.getServletContext());
+        ArrayList category_list = DbManager.queryCategory();
         
-        if(op.equals(ControllPattern))
-        {
-          int number;  
-          /*try{
-           * number = Integer.parseInt(request.getParameter("quantity"));
-           * }
-           * catch (NumberFormatException ex){
-           * this.printErrorPage(response);
-           * return;
-           * }
-           * try{
-           * number = Integer.parseInt(request.getParameter("price"));
-           * }
-           * catch (NumberFormatException ex){
-           * this.printErrorPage(response);
-           * return;
-           * }*/
-           product = (Product) session.getAttribute("sold");
+        if(op.equals(ConfirmPattern))
+        {  
+           Product product = new Product();
+           try { 
            product.setProduct_name(request.getParameter("nome"));
            product.setDescription(request.getParameter("description"));
            product.setUm(request.getParameter("um"));
            product.setQuantity(Integer.parseInt(request.getParameter("quantity")));
            product.setPrice(Integer.parseInt(request.getParameter("price")));
            product.setImage_url(null);
-           product.setSeller_name(session.getAttribute("user_id").toString());
-           session.setAttribute("sold", product);
+           product.setCategory_id(Integer.parseInt(request.getParameter("category")));    
+           }catch(Exception e) {        
+               response.setContentType("text/html;charset=UTF-8");
+               PrintWriter out = response.getWriter();    
+                try { 
+            HtmlManager.printSellerAddProductPage(out, category_list);
+            return;
+        } finally {            
+            out.close();
+          }}
           
-           response.setContentType("text/html;charset=UTF-8");
+        session.setAttribute("order", product);
+           
+        response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        try {
-            HtmlManager.printSellerAddControllPage(out, category_list, product);
+       
+        try { 
+
+            HtmlManager.printSellerAddConfirmPage(out, category_list, product);
         } finally {            
             out.close();
           } 
-        }
-        
-        
-        else if(op.equals(ConfirmPattern))
-        {
-            if(Integer.parseInt(request.getParameter("categories"))<1 || Integer.parseInt(request.getParameter("categories"))>4)
-              {
-              this.printErrorPage(response);
-              return;
-              }
-        
-            
-            product.setCategory_id(Integer.parseInt(request.getParameter("categories")));
-            session.setAttribute("sold", product);
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-         try {
-            HtmlManager.printSellerAddFormPage(out, category_list );
-         } finally {            
-            out.close();
-           } 
-        }
-        
+        }       
         
         else if(op.equals(CancelPattern))
         {
-            session.removeAttribute("order");
+            if(session.getAttribute("order")!= null)
+                {
+                session.removeAttribute("order");
+                }
             response.sendRedirect(contextPath + "/Seller/SellerController?op=home");
         }
         
@@ -114,21 +91,23 @@ public class SellerAddServlet extends HttpServlet {
         else if(op.equals(ResponsePattern))
         {
         
+            Product product = (Product) session.getAttribute("order");
+            
             if(product == null)
             {
                 this.printErrorPage(response);
                 return;
             }
   
-        if(DbManager.queryInsertNewProduct((Product)session.getAttribute("sold"), Integer.parseInt(session.getAttribute("user_id").toString()))) {
-            response.sendRedirect(contextPath + "/Seller/SellerController?op=home&message=Il tuo prodotto e' stato immesso con successo.&type=1");   
+        if(DbManager.queryInsertNewProduct(product , Integer.parseInt(session.getAttribute("user_id").toString()))) {
+            response.sendRedirect(contextPath + "/Seller/SellerController?op=myStore&message=La transazione e' stato eseguita correttamente.&type=1");   
             } 
         else
         {
-            response.sendRedirect(contextPath + "/Seller/SellerController?op=home&message=Il tuo prodotto non e' stato immesso correttamente.&type=-1");
+            response.sendRedirect(contextPath + "/Seller/SellerController?op=myStore&message=La transazione non e' stato eseguita correttamente.&type=-1");
         
         }
-        session.removeAttribute("sold");
+        session.removeAttribute("order");
         }
         
     }

@@ -47,14 +47,14 @@ public class BuyerOrderServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         String op = request.getParameter("op");
         Product product = null;
-        ArrayList category_list = DbManager.queryCategory(this.getServletContext());
+        ArrayList category_list = DbManager.queryCategory();
         
         if(op.equals(RequestPattern))
          
         {
         //Controllo che l'input sia un id   
         try{       
-            product = DbManager.queryProduct(this.getServletContext(), Integer.parseInt(request.getParameter("product")));           
+            product = DbManager.queryProduct(Integer.parseInt(request.getParameter("product")));           
         }catch (NumberFormatException ex){
             response.sendRedirect(redirectURL);
             return;
