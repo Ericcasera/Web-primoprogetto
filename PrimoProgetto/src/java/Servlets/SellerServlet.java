@@ -6,6 +6,7 @@ package Servlets;
 
 import Managers.DBmanager;
 import Managers.HtmlManager;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -105,10 +106,14 @@ public class SellerServlet extends HttpServlet {
         
         else if(op.equals(addProductPattern)){
         
+          String path = this.getServletContext().getRealPath("Images/"); 
+          File folder = new File(path);
+          File[] listOfFiles = folder.listFiles(); 
+                   
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();  
             try{
-                HtmlManager.printSellerAddProductPage(out, category_list);
+                HtmlManager.printSellerAddProductPage(out, category_list , listOfFiles);
         } finally {            
             out.close();
         }

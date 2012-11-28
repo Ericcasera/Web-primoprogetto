@@ -7,6 +7,7 @@ package Managers;
 import Beans.Category;
 import Beans.Order;
 import Beans.Product;
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -465,8 +466,6 @@ public class HtmlManager {
     out.println("<html><head>");
     out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
     out.println("<link href=\"" +  contextPath + "/Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
-    out.println("<script src=\"" + contextPath + "/Bootstrap/js/jquery-1.8.2.js\"></script>");
-    out.println("<script src=\"" + contextPath + "/Bootstrap/js/bootstrap.min.js\"></script>");
     out.println("   <title>Home Page</title> </head> <body>");
     
     this.printPageHeaderSeller(out, category_list);
@@ -509,7 +508,9 @@ public class HtmlManager {
     out.println("<!DOCTYPE html>");
     out.println("<html><head>");
     out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
-    out.println("<link href=\"" + contextPath + "/Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
+    out.println("<link href=\"" +  contextPath + "/Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
+    out.println("<script src=\"" + contextPath + "/Bootstrap/js/jquery-1.8.2.js\"></script>");
+    out.println("<script src=\"" + contextPath + "/Bootstrap/js/bootstrap.min.js\"></script>");
     out.println("   <title>My Store</title> </head> <body>");
     
     this.printPageHeaderSeller(out, category_list);
@@ -600,62 +601,102 @@ public class HtmlManager {
     }
     
  
-    public void printSellerAddProductPage(PrintWriter out,  ArrayList category_list ){
+    public void printSellerAddProductPage(PrintWriter out,  ArrayList category_list , File[] listOfFiles){
     out.println("<!DOCTYPE html>");
     out.println("<html><head>");
     out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
-    out.println("<link href=\"" + contextPath + "/Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
+    out.println("<link href=\"" +  contextPath + "/Bootstrap/css/bootstrap.css\" rel=\"stylesheet\">");
+    out.println("<script src=\"" + contextPath + "/Bootstrap/js/jquery-1.8.2.js\"></script>");
+    out.println("<script src=\"" + contextPath + "/Bootstrap/js/bootstrap.min.js\"></script>");  
+    out.println("<script>");
+    out.println("$(function() {");
+    out.println("$( \"#select_image\" ).click(function() {");
+    out.println("       $( \"#form_div\" ).hide();");
+    out.println("       $( \"#image_div\").show();");
+    out.println("   return false;});");
+    out.println("    });");
+    out.println("function changeImage(image_name){");
+    out.println("   document.getElementById(\"image_preview\").src = '/PrimoProgetto/Images/' + image_name;");
+    out.println("   document.getElementById(\"image_name\").value = image_name;");
+    out.println("       $(function() {");
+    out.println("           $(\"#image_div\").hide();");
+    out.println("           $( \"#form_div\" ).show();});");
+    out.println("     return false };");
+    out.println(" </script>");     
     out.println("   <title>Aggiunta prodotto</title> </head> <body>");
     
     this.printPageHeaderSeller(out, category_list);
     
        out.println("       <div class=\"span10\">");
-       out.println("<H3>Immetti le informazioni necessarie</H3>");
+   out.println("<div id=\"form_div\">");
+       out.println("            <H3>Immetti le informazioni necessarie</H3>");
        out.println("<form class=\"form-horizontal\" action=\"SellerAddController?op=confirm\" method=\"post\">");
-       out.println("<div class=\"control-group\">");
-       out.println("<label class=\"control-label\">Nome Prodotto</label>");
-       out.println("<div class=\"controls\">");
-       out.println("<input type=\"text\" placeholder=\"Inserisci un nome prodotto\" name=\"nome\">");
-       out.println("</div></div>");  						
-       out.println("<div class=\"control-group\">");
-       out.println("<label class=\"control-label\">Descrizione</label>");
-       out.println("<div class=\"controls\">");
-       out.println("<input type=\"text\" placeholder=\"Inserisci una descrizione\" name=\"description\">");
-       out.println("</div></div>");
-       out.println("<div class=\"control-group\">");
-       out.println("<label class=\"control-label\">Unità di Misura</label>");
-       out.println("<div class=\"controls\">");
-       out.println("<input type=\"text\" placeholder=\"Inserisci un unità\" name=\"um\">");
-       out.println("</div></div>");
-       out.println("<div class=\"control-group\">");
+       out.println("    <div class=\"control-group\">");
+       out.println("            <div class=\"controls\">");
+       out.println("<a href=\"#\" id=\"select_image\" onClick=\"return false;\">");  
+       out.println("<img id=\"image_preview\" src=\"/PrimoProgetto/Images-site/immagine_vuota.jpg\" width=\"150px;\" height=\"150px;\" class=\"img-polaroid\"><br>");
+       out.println("</a>");  
+       out.println("    </div></div>");  
+       out.println("    <div class=\"control-group\">");
+       out.println("        <label class=\"control-label\">Nome Prodotto</label>");
+       out.println("            <div class=\"controls\">");
+       out.println("                <input type=\"text\" placeholder=\"Inserisci un nome prodotto\" name=\"nome\">");
+       out.println("    </div></div>");  						
+       out.println("    <div class=\"control-group\">");
+       out.println("        <label class=\"control-label\">Descrizione</label>");
+       out.println("            <div class=\"controls\">");
+       out.println("                <input type=\"text\" placeholder=\"Inserisci una descrizione\" name=\"description\">");
+       out.println("    </div></div>");
+       out.println("    <div class=\"control-group\">");
+       out.println("        <label class=\"control-label\">Unità di Misura</label>");
+       out.println("            <div class=\"controls\">");
+       out.println("                <input type=\"text\" placeholder=\"Inserisci un unità\" name=\"um\">");
+       out.println("    </div></div>");
+       out.println("    <div class=\"control-group\">");
        out.println("<label class=\"control-label\">Quantità</label>");
        out.println("<div class=\"controls\">");
        out.println("<input type=\"number\" placeholder=\"Inserisci una quantità\" name=\"quantity\">");
-       out.println("</div></div>");
-       out.println("<div class=\"control-group\">");
+       out.println("    </div></div>");
+       out.println("    <div class=\"control-group\">");
        out.println("<label class=\"control-label\">Prezzo</label>");
        out.println("<div class=\"controls\">");
        out.println("<input type=\"number\" placeholder=\"Inserisci un prezzo\" name=\"price\">");
-       out.println("</div></div>");
-       
-       out.println("<div class=\"control-group\">");
-       out.println("<label class=\"control-label\">Categorie:</label>");
-       out.println("<div class=\"controls\">");
-       out.println("<select class=\"combobox\" name=\"category\">");
+       out.println("    </div></div>");
+       out.println("    <div class=\"control-group\">");
+       out.println("        <label class=\"control-label\">Categorie:</label>");
+       out.println("            <div class=\"controls\">");
+       out.println("                <select class=\"combobox\" name=\"category\">");
        Iterator iter = category_list.iterator();
        while(iter.hasNext()){
             Category tmp = (Category) iter.next();
-            out.println("<option value=\""+tmp.getId()+"\">"+ tmp.getName() +"</option>");
+            out.println("               <option value=\""+tmp.getId()+"\">"+ tmp.getName() +"</option>");
        }
-       out.println("</select>");
+       out.println("                </select>");
        
-       out.println("</div></div>");
-       
+       out.println("    </div></div>");
+       out.println("                            <input id=\"image_name\" name=\"image_url\" type=\"hidden\" > ");
        out.println("        <div class=\"control-group\">");
        out.println("            <div class=\"controls\">");
        out.println("                <button type=\"submit\" class=\"btn\">Avanti</button>"); 
-       out.println("            </div>");
-       out.println("        </div></form>");
+       out.println("        </div></div>");
+       out.println("        </form>");
+    out.println("</div>");
+       
+    out.println("<div  id=\"image_div\" class=\"hide\">");
+    out.println("<h3>Seleziona un'immagine</h3>");
+    String file_name; 
+    for (int i = 0; i < listOfFiles.length; i++) 
+            {
+                 if (listOfFiles[i].isFile()) 
+                 {
+                file_name = listOfFiles[i].getName();
+                out.println("<a href=\"#\" onClick=\"return changeImage('"+file_name+"');\"> ");
+                out.println("<img src=\""+ contextPath + "/Images/" + file_name + "\" width=\"150\" height=\"150\">");
+                out.println("</a>");
+                 }
+            }
+    out.println("</div>");
+       
        out.println("        </div> </div>");
        out.println("    </body>");
        out.println("  </html>");
@@ -676,7 +717,7 @@ public void printSellerAddConfirmPage(PrintWriter out , ArrayList category_list,
        out.println("       <div class=\"span10\">");
        out.println("<h3>Conferma vendita</h3>");
        out.println("           <table class=\"table\"> <tbody>");
-       out.println("<tr><td class=\"span3\"><img src=\"" + contextPath + "/"+ product.getImage_url() +"\" width=\"150\" height=\"150\" alt=\""+product.getProduct_name()+"\"></td>");
+       out.println("<tr><td class=\"span3\"><img src=\"" + contextPath + "/Images/"+ product.getImage_url() +"\" width=\"150\" height=\"150\" alt=\""+product.getProduct_name()+"\"></td>");
        out.println("<td><p><h4>"+ product.getProduct_name() + "</h4>");   
        out.println("<small>"+product.getDescription()+"</small><br>");
        out.println("<strong>Prezzo : </strong>"+product.getPrice() + "$<br>");

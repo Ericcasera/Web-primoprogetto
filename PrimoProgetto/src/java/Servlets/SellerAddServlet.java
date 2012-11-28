@@ -53,17 +53,11 @@ public class SellerAddServlet extends HttpServlet {
            product.setUm(request.getParameter("um"));
            product.setQuantity(Integer.parseInt(request.getParameter("quantity")));
            product.setPrice(Integer.parseInt(request.getParameter("price")));
-           product.setImage_url(null);
-           product.setCategory_id(Integer.parseInt(request.getParameter("category")));    
-           }catch(Exception e) {        
-               response.setContentType("text/html;charset=UTF-8");
-               PrintWriter out = response.getWriter();    
-                try { 
-            HtmlManager.printSellerAddProductPage(out, category_list);
-            return;
-        } finally {            
-            out.close();
-          }}
+           product.setImage_url(request.getParameter("image_url"));
+           product.setCategory_id(Integer.parseInt(request.getParameter("category"))); 
+           }catch(Exception e) {
+           response.sendRedirect(contextPath + "/Seller/SellerController?op=addProduct");
+           }
           
         session.setAttribute("order", product);
            
