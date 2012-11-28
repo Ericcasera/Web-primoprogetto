@@ -52,8 +52,13 @@ public class SellerAddServlet extends HttpServlet {
            product.setDescription(request.getParameter("description"));
            product.setUm(request.getParameter("um"));
            product.setQuantity(Integer.parseInt(request.getParameter("quantity")));
-           product.setPrice(Integer.parseInt(request.getParameter("price")));
-           product.setImage_url(request.getParameter("image_url"));
+           product.setPrice(Integer.parseInt(request.getParameter("price")));       
+           String image = request.getParameter("image_url");
+           if(image == null || image.equals(""))
+           {
+               image = "no_image.jpg";
+           }          
+           product.setImage_url(image);
            product.setCategory_id(Integer.parseInt(request.getParameter("category"))); 
            }catch(Exception e) {
            response.sendRedirect(contextPath + "/Seller/SellerController?op=addProduct");

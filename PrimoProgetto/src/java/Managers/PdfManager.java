@@ -35,6 +35,14 @@ import javax.servlet.ServletContext;
  */
 public class PdfManager {
     
+    private ServletContext context;
+    private String contextPath;
+    
+    public PdfManager(ServletContext context){
+        this.context = context;
+        this.contextPath = context.getContextPath();  
+    }
+    
     @SuppressWarnings("empty-statement")
     private String Sha1Name(String fileName) throws Exception{
 
@@ -44,10 +52,8 @@ public class PdfManager {
         BufferedInputStream bis = new BufferedInputStream(fis);
         DigestInputStream   dis = new DigestInputStream(bis, sha1);
 
-        // read the file and update the hash calculation
         while (dis.read() != -1);
 
-        // get the hash value as byte array
         byte[] hash = sha1.digest();
 
         fis.close();
@@ -64,7 +70,7 @@ public class PdfManager {
         return formatter.toString();
     }
     
-    private void buildPdf(Document document , Product product , String buyer_name , int order_id , ServletContext context)
+    private void buildPdf(Document document , Product product , String buyer_name , int order_id)
     {  
       Font titleFont = FontFactory.getFont(FontFactory.HELVETICA, 13, Font.BOLD);
       Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 11, Font.NORMAL);
@@ -84,10 +90,11 @@ public class PdfManager {
       //Corpo
       Paragraph body = new Paragraph();
       
-      Image image = Image.getInstance(context.getRealPath("/Images/banana.jpg"));
+      Image image = Image.getInstance(context.getRealPath(product.getImage_url()));
       image.scaleToFit(200f,200f);
       image.setAlignment(Image.TEXTWRAP);
       body.add(image);
+      
       
       //Titolo
       body.add(new Chunk("\nFattura ordine #"+order_id , titleFont));
@@ -140,7 +147,7 @@ public class PdfManager {
     }
     
     
-    public String buildReceipt(ServletContext context , Product product , String buyer_name , int order_id){ 
+    public String buildReceipt(Product product , String buyer_name , int order_id){ 
            
         String path = context.getRealPath("Receipts/"+product.getProduct_id()+"_"+product.getProduct_name()+".pdf");
         Document document = new Document();
@@ -150,7 +157,7 @@ public class PdfManager {
         PdfWriter.getInstance(document, new FileOutputStream(path));
         document.open();
         
-        buildPdf(document , product , buyer_name , order_id , context);
+        buildPdf(document , product , buyer_name , order_id);
         
         document.close();  
         String sha1 = Sha1Name(path);

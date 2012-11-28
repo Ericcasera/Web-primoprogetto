@@ -33,7 +33,7 @@ public class BuyerOrderServlet extends HttpServlet {
             DbManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
             HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
             contextPath = this.getServletContext().getContextPath();
-            PdfManager = new PdfManager();
+            PdfManager = new PdfManager(this.getServletContext());
             RequestPattern  = "request";
             ConfirmPattern  = "confirm";
             ResponsePattern = "response";
@@ -131,7 +131,7 @@ public class BuyerOrderServlet extends HttpServlet {
         
         if(DbManager.queryUpdateProdcuts(product)) {
                 int order_id = DbManager.queryInsertBuyOrder(product, Integer.parseInt(session.getAttribute("user_id").toString()));
-                String receipt_path = PdfManager.buildReceipt(this.getServletContext() , product , session.getAttribute("user").toString() , order_id);
+                String receipt_path = PdfManager.buildReceipt(product , session.getAttribute("user").toString() , order_id);
                 DbManager.queryInsertReceipt(order_id, receipt_path);     
                 response.sendRedirect(contextPath + "/Buyer/BuyerController?op=orders&message=Il tuo ordine e' stato completato con successo.&type=1");   
             } 
