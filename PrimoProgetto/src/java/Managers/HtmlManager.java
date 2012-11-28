@@ -397,9 +397,9 @@ public class HtmlManager {
     private void printPageHeaderSeller(PrintWriter out , ArrayList category_list)
     {
     out.println("   <div class=\"row-fluid\">");
-    out.println("       <div class=\"span12 \">");
+    out.println("       <div class=\"span12\">");
     out.println("           <div class=\"row-fluid\">");
-    out.println("               <div class=\"span10\"><img src=\"/PrimoProgetto/Images/logo.jpg\" alt=\"logo\"> </div>");
+    out.println("               <div class=\"span10\"><img src=\"/PrimoProgetto/Images-site/logo.jpg\" alt=\"logo\"> </div>");
     out.println("   </div></div></div><br>");
     out.println("<div class=\"container-fluid\">");
     out.println("  	<div class=\"row-fluid\">");
@@ -426,7 +426,7 @@ public class HtmlManager {
     out.println("   <div class=\"row-fluid\">");
     out.println("       <div class=\"span12 \">");
     out.println("           <div class=\"row-fluid\">");
-    out.println("               <div class=\"span10\"><img src=\"/PrimoProgetto/Images/logo.jpg\" alt=\"logo\"> </div>");
+    out.println("               <div class=\"span10\"><img src=\"/PrimoProgetto/Images-site/logo.jpg\" alt=\"logo\"> </div>");
     out.println("   </div></div></div><br>");
     out.println("<div class=\"container-fluid\">");
     out.println("  	<div class=\"row-fluid\">");
@@ -601,22 +601,67 @@ public class HtmlManager {
     this.printPageHeaderSeller(out, category_list);
     
        out.println("       <div class=\"span10\">");
-       out.println("<H3>immeti le informazioni necessarie</H3>");
-       out.println("<form action=\"SellerAddController?op=controll\" method=\"post\">");
-       out.println("Nome Prodotto: <input type=\"text\" name=\"nome\"><br>");
+       out.println("<H3>Immetti le informazioni necessarie</H3>");
+       out.println("<form class=\"form-horizontal\" action=\"SellerAddController?op=controll\" method=\"post\">");
+       /*out.println("Nome Prodotto: <input type=\"text\" name=\"nome\"><br>");
        out.println("Descrizione: <input type=\"text\" name=\"description\"><br>");
        out.println("Unità Di Misura: <input type=\"text\" name=\"um\"><br>");
        out.println("Quantità: <input type=\"number\" name=\"quantity\"><br>");
-       out.println("Prezzo: <input type=\"number\" name=\"price\"><br>");
-       //data
-       //image
-      // out.println("        <div class=\"control-group\">");
-      // out.println("            <div class=\"controls\">");
-       out.println("                <input type=\"submit\" value=\"Avanti\">"); 
-      // out.println("            </div>");
-      // out.println("        </div> </td></tr>");
-     //  out.println("           </tbody> </div> </div> </div>");
-       out.println(" </form> </div>  </body>");     
+       out.println("Prezzo: <input type=\"number\" name=\"price\"><br>");*/
+       
+       //AGGIUNGI L'IMMAGINE PER DIO!!!!!
+       
+       out.println("<div class=\"control-group\">");
+       out.println("<label class=\"control-label\">Nome Prodotto</label>");
+       out.println("<div class=\"controls\">");
+       out.println("<input type=\"text\" placeholder=\"Inserisci un nome prodotto\" name=\"nome\">");
+       out.println("</div></div>");  						
+       out.println("<div class=\"control-group\">");
+       out.println("<label class=\"control-label\">Descrizione</label>");
+       out.println("<div class=\"controls\">");
+       out.println("<input type=\"text\" placeholder=\"Inserisci una descrizione\" name=\"description\">");
+       out.println("</div></div>");
+       out.println("<div class=\"control-group\">");
+       out.println("<label class=\"control-label\">Unità di Misura</label>");
+       out.println("<div class=\"controls\">");
+       out.println("<input type=\"text\" placeholder=\"Inserisci un unità\" name=\"um\">");
+       out.println("</div></div>");
+       out.println("<div class=\"control-group\">");
+       out.println("<label class=\"control-label\">Quantità</label>");
+       out.println("<div class=\"controls\">");
+       out.println("<input type=\"number\" placeholder=\"Inserisci una quantità\" name=\"quantity\">");
+       out.println("</div></div>");
+       out.println("<div class=\"control-group\">");
+       out.println("<label class=\"control-label\">Prezzo</label>");
+       out.println("<div class=\"controls\">");
+       out.println("<input type=\"number\" placeholder=\"Inserisci un prezzo\" name=\"price\">");
+       out.println("</div></div>");
+       
+       out.println("<div class=\"control-group\">");
+       out.println("<label class=\"control-label\">Categorie:</label>");
+       out.println("<div class=\"controls\">");
+       
+       Iterator iter = category_list.iterator();
+       while(iter.hasNext()){
+            Category tmp = (Category) iter.next();
+            //out.println("<form action=\"SellerAddController?op=confirm\" method=\"post\">");
+            //out.println("<li><input type=\"radio\" name=\"categories\" value=\""+tmp.getId()+"\" checked> "+ tmp.getName()+"");
+            out.println("<label class=\"radio inline\">");
+  	    out.println("<input type=\"radio\" name=\"categories\" value=\""+tmp.getId()+"\">");
+            out.println(tmp.getName());
+            out.println("</label>");
+       }
+       
+       out.println("</div></div>");
+       
+       out.println("        <div class=\"control-group\">");
+       out.println("            <div class=\"controls\">");
+       out.println("                <button type=\"submit\" class=\"btn\">Avanti</button>"); 
+       out.println("            </div>");
+       out.println("        </div>");
+       out.println("        </div> </div>");
+       out.println("    </body>");
+       out.println("  </html>");
     
     }
     

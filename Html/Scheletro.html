@@ -3,26 +3,14 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link href="Bootstrap/css/bootstrap.css" rel="stylesheet">
-        <script src="Bootstrap/js/jquery-1.8.2.js"></script>
-        <script src="Bootstrap/js/bootstrap.min.js"></script>
 		<title>Scheletro sito</title>
 	</head>
 
 	<body>
     	<div class="row-fluid">
-    		<div class="span12 page-header">
+    		<div class="span12">
         		<div class="row-fluid">
         			<div class="span10"><img src="Images/logo.jpg" alt="logo">
-                    </div>
-                    <div class="span2 btn-toolbar" style="margin=0;">
-        			<div class="btn-group" style="position:absolute; right:50px;">
-            			<button class="btn dropdown-toggle" data-toggle="dropdown">Benvenuto<span class="caret"></span></button>
-                		<ul class="dropdown-menu pull-right">
-                  			<li><a href="#">I miei ordini</a></li>
-                  			<li class="divider"></li>
-                  			<li><a href="#">Logout</a></li>
-                		</ul>
-            		</div>
                     </div>
             	</div>
         	</div>
@@ -45,14 +33,7 @@
                 </div>
                     
                 <div class="span10">
-      				<table class="table">
-                    	<thead>
-                        	<tr><!--
-                    			<th>Categoria</th>
-                        		<th>Descrizione</th>
-                                -->
-                        	</tr>
-                        </thead>
+      				<!--<table class="table">
                         <tbody>
                         	<tr>
                                 <td class="span3"><img src="Images/frutta.jpg" width="200" height="200" alt="frutta"></td>
@@ -71,7 +52,74 @@
                                 <td><h5>Trattori</h5>I buoi per arare il campo sono superati!</td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table>-->
+                    
+                    <h3>Immetti le informazioni necessarie</h3>
+                    <form class="form-horizontal" action="SellerAddController?op=controll" method="post">
+  						<div class="control-group">
+    						<label class="control-label">Nome Prodotto</label>
+    						<div class="controls">
+      							<input type="text" placeholder="Inserisci un nome prodotto" name="nome">
+  	  						</div>
+  						</div>
+  						<div class="control-group">
+    						<label class="control-label">Descrizione</label>
+    						<div class="controls">
+      							<input type="text" placeholder="Inserisci una descrizione" name="description">
+  	  						</div>
+  						</div>
+                        <div class="control-group">
+    						<label class="control-label">Unità di Misura</label>
+    						<div class="controls">
+      							<input type="text" placeholder="Inserisci un unità" name="um">
+  	  						</div>
+  						</div>
+                        <div class="control-group">
+    						<label class="control-label">Quantità</label>
+    						<div class="controls">
+      							<input type="number" placeholder="Inserisci una quantità" name="quantity">
+  	  						</div>
+  						</div>
+                        <div class="control-group">
+    						<label class="control-label">Prezzo</label>
+    						<div class="controls">
+      							<input type="number" placeholder="Inserisci un prezzo" name="price">
+  	  						</div>
+  						</div>
+                        
+                        <div class="control-group">
+                        	<label class="control-label">Categorie:</label>
+                        	<div class="controls">
+                        		<label class="radio inline">
+  									<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+  									Attrezzi
+								</label>
+                        		<label class="radio inline">
+  									<input type="radio" name="optionsRadios" id="optionsRadios1" value="option2">
+  									Frutta
+								</label>
+                    	    	<label class="radio inline">
+  									<input type="radio" name="optionsRadios" id="optionsRadios1" value="option3">
+  									Mantenimento Fauna
+								</label>
+                    	    	<label class="radio inline">
+  									<input type="radio" name="optionsRadios" id="optionsRadios1" value="option4">
+  									Trattori
+								</label>
+                        		<label class="radio inline">
+  									<input type="radio" name="optionsRadios" id="optionsRadios1" value="option5">
+  									Verdura
+								</label>
+                        	</div>
+                        </div>
+                        
+  						<div class="control-group">
+    						<div class="controls">
+      							<button type="submit" class="btn">Avanti</button>
+    						</div>
+  						</div>
+					</form>
+                    
     			</div>
   			</div>
 		</div>
