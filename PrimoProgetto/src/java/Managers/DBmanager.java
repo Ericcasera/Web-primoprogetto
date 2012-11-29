@@ -207,7 +207,7 @@ private ServletContext context;
                     + "p.NAME as product_name , p.image_url as image_url , u.username as seller_name " 
                     + "from (orders o join products p on o.PRODUCT_ID = p.ID) join users u on seller_id = u.id " 
                     + "where o.BUYER_ID = ?"
-                    + "order by order_date desc";
+                    + "order by order_date desc , order_id desc";
             PreparedStatement stm = null ;
             ResultSet rs = null;
             ArrayList lista = new ArrayList(40);
@@ -456,7 +456,7 @@ private ServletContext context;
                     + "p.NAME as product_name , p.image_url as image_url , u.username as seller_name, us.username as buyer_name  " 
                     + "from ((orders o join products p on o.PRODUCT_ID = p.ID) join users u on seller_id = u.id) join users us on buyer_id = us.id " 
                     + "where p.seller_id = ?"
-                    + "order by order_date desc , order_id";
+                    + "order by order_date desc , order_id desc";
             PreparedStatement stm = null ;
             ResultSet rs = null;
             ArrayList lista = new ArrayList(40);
@@ -557,7 +557,7 @@ private ServletContext context;
     public ArrayList querySell(int Seller_id)
     {
     
-            String query = "Select * from products where seller_id = ? order by date_order desc ";
+            String query = "Select * from products where seller_id = ? order by date_order desc , id desc ";
             PreparedStatement stm = null ;
             ResultSet rs = null;
             ArrayList lista = new ArrayList(40);
