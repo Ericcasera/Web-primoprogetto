@@ -97,26 +97,29 @@ public class PdfManager {
       
       
       //Titolo
-      body.add(new Chunk("\nFattura ordine #"+order_id , titleFont));
+      body.add(new Chunk("\n  Fattura ordine #"+order_id , titleFont));
       body.add(Chunk.NEWLINE);
       
       //Dati
-      body.add(new Chunk("\nOrdinato in data        : " , smallBold));
+      body.add(new Chunk("\n  Ordinato in data        : " , smallBold));
       body.add(new Chunk(""+new java.sql.Date(Calendar.getInstance().getTimeInMillis()) +"\n" , normalFont)); 
       
-      body.add(new Chunk("Ordine eseguito da   : " , smallBold));
+      body.add(new Chunk("  Ordine eseguito da   : " , smallBold));
       body.add(new Chunk(""+ buyer_name +"\n" , normalFont)); 
       
-      body.add(new Chunk("Codice prodotto        : #" , smallBold));
+      body.add(new Chunk("  Codice prodotto        : #" , smallBold));
       body.add(new Chunk(""+product.getProduct_id()+"\n" , normalFont));
       
-      body.add(new Chunk("Nome prodotto          : " , smallBold));
+      body.add(new Chunk("  Nome prodotto          : " , smallBold));
       body.add(new Chunk(""+product.getProduct_name()+"\n" , normalFont));
       
-      body.add(new Chunk("Prodotto venduto da : " , smallBold));
+      body.add(new Chunk("  Prodotto venduto da : " , smallBold));
       body.add(new Chunk(""+product.getSeller_name()+"\n" , normalFont));
       
       //Prezzo
+      body.add(Chunk.NEWLINE);
+      body.add(Chunk.NEWLINE);
+      body.add(Chunk.NEWLINE);
       body.add(Chunk.NEWLINE);
       body.add(Chunk.NEWLINE);
       body.add(Chunk.NEWLINE);
@@ -175,13 +178,5 @@ public class PdfManager {
         Logger.getLogger(PdfManager.class.getName()).log(Level.SEVERE, null, e);
         return null; }                    
     }
-    
-   private static void addEmptyLine(Paragraph paragraph, int number) {
-    for (int i = 0; i < number; i++) {
-      paragraph.add(new Paragraph(" "));
-    }
-  }
-    
-    
-    
+      
 }

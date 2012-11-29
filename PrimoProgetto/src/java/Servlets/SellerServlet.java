@@ -24,7 +24,7 @@ public class SellerServlet extends HttpServlet {
 
     private HtmlManager HtmlManager;
     private DBmanager DbManager;
-    private String contextPath , homePattern , addProductPattern  , productsPattern, myStorePattern;
+    private String contextPath , homePattern , productsPattern, myStorePattern;
     private String redirectURL;
     
     @Override
@@ -32,7 +32,6 @@ public class SellerServlet extends HttpServlet {
             this.DbManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
             this.HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
             this.contextPath = this.getServletContext().getContextPath();
-            this.addProductPattern  = "addProduct";
             this.homePattern = "home";
             this.productsPattern = "products";
             this.myStorePattern= "myStore";
@@ -104,26 +103,6 @@ public class SellerServlet extends HttpServlet {
             out.close();
         }  }
         
-        else if(op.equals(addProductPattern)){
-        
-          String path = this.getServletContext().getRealPath("Images/"); 
-          File folder = new File(path);
-          File[] listOfFiles = folder.listFiles(); 
-                   
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();  
-            try{
-                HtmlManager.printSellerAddProductPage(out, category_list , listOfFiles);
-        } finally {            
-            out.close();
-        }
-        
-        
-        }
-        
-        
-    
-    
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

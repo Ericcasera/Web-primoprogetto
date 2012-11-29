@@ -49,23 +49,22 @@ public class BuyerOrderServlet extends HttpServlet {
         Product product = null;
         ArrayList category_list = DbManager.queryCategory();
         
-        if(op.equals(RequestPattern))
+        if(op.equals(RequestPattern)) 
          
         {
-        //Controllo che l'input sia un id   
+        //Controllo input 
         try{       
             product = DbManager.queryProduct(Integer.parseInt(request.getParameter("product")));           
         }catch (NumberFormatException ex){
             response.sendRedirect(redirectURL);
             return;
         }
-        //Controllo che ci sia un prodotto
         if(product == null)
             {
                 response.sendRedirect(redirectURL);
                 return;
             }
-        session.setAttribute("order", product);
+        session.setAttribute("order", product); 
               
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
@@ -78,10 +77,10 @@ public class BuyerOrderServlet extends HttpServlet {
         }
         
         }
-        else if(op.equals(ConfirmPattern))
+        else if(op.equals(ConfirmPattern)) //Pagina di riepilogo dove confermo o annullo l'ordine
         {
           int number;  
-          //Controllo l'input
+          //Controllo input
             try{       
                  number = Integer.parseInt(request.getParameter("number"));          
                }
@@ -89,7 +88,6 @@ public class BuyerOrderServlet extends HttpServlet {
                   this.printErrorPage(response);
                   return;
                }  
-          //Controllo che ci sia un prodotto da acquistare in sessione
            product = (Product) session.getAttribute("order");                    
            if(product == null)
             {
@@ -97,7 +95,7 @@ public class BuyerOrderServlet extends HttpServlet {
                 return;
             }
                     
-           product.setQuantity(number);
+           product.setQuantity(number); //Aggiorno la quantità da acquistare del prodotto e stampo la pagine di conferma
            session.setAttribute("order", product);
     
         response.setContentType("text/html;charset=UTF-8");
@@ -108,18 +106,18 @@ public class BuyerOrderServlet extends HttpServlet {
             out.close();
         } 
         }
-        else if(op.equals(ResponsePattern))
+        else if(op.equals(ResponsePattern)) 
         {
         product = (Product) session.getAttribute("order");
         
         String prec_op = request.getParameter("prec_op");
                    
-           if(product == null)
+           if(product == null) //Controllo input
             {
                 this.printErrorPage(response);
                 return;
             }
-           if(prec_op == null)
+           if(prec_op == null) 
            {
                session.removeAttribute("order");
                this.printErrorPage(response);
@@ -129,10 +127,12 @@ public class BuyerOrderServlet extends HttpServlet {
         String result = null;
         session.removeAttribute("order");   
         
-        if(DbManager.queryUpdateProdcuts(product)) {
-                int order_id = DbManager.queryInsertBuyOrder(product, Integer.parseInt(session.getAttribute("user_id").toString()));
-                String receipt_path = PdfManager.buildReceipt(product , session.getAttribute("user").toString() , order_id);
-                DbManager.queryInsertReceipt(order_id, receipt_path);     
+        if(DbManager.queryUpdateProdcuts(product)) { //Aggiorno la quantità del prodotto in vendita 
+        //Se il metodo ritorna false vuol dire che non cerano abbastanza prodotti in vendità e quindi avviso l'utente e ridireziono   
+        //Il caso false capita solo in caso di acquisto "contemporaneo" in quanto la quantità inserita viene controllata da javascript nella pagine di request    
+                int order_id = DbManager.queryInsertBuyOrder(product, Integer.parseInt(session.getAttribute("user_id").toString())); //Inserisco l'orine del database. il metodo ritorna l'id del ordine inserito
+                String receipt_path = PdfManager.buildReceipt(product , session.getAttribute("user").toString() , order_id); //Creo la fattura dell'ordine 
+                DbManager.queryInsertReceipt(order_id, receipt_path);   //Inserisco la fattura e ridireziono con messaggio di successo  
                 response.sendRedirect(contextPath + "/Buyer/BuyerController?op=orders&message=Il tuo ordine e' stato completato con successo.&type=1");   
             } 
         else
@@ -141,7 +141,7 @@ public class BuyerOrderServlet extends HttpServlet {
         
         }
         }
-        else if(op.equals(CancelPattern))
+        else if(op.equals(CancelPattern))//Caso di eliminazione dell'ordine , rimuove semplicemente l'attributo della sessione
         {
             product = (Product) session.getAttribute("order");   
             

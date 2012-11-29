@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 /**
  *
  * @author Daniel
- * Servlet per la gestione di BuyerHome , Products , Orders
+ * 
  */
 public class BuyerServlet extends HttpServlet {
 

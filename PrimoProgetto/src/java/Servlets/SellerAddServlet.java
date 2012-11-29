@@ -7,6 +7,7 @@ package Servlets;
 import Beans.Product;
 import Managers.DBmanager;
 import Managers.HtmlManager;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -24,13 +25,14 @@ public class SellerAddServlet extends HttpServlet {
 
     private HtmlManager HtmlManager;
     private DBmanager DbManager;
-    private String contextPath , ResponsePattern , redirectURL , CancelPattern, ConfirmPattern;
+    private String contextPath , ResponsePattern , addProductPattern , redirectURL , CancelPattern, ConfirmPattern;
     
     @Override
     public void init() throws ServletException {
             DbManager = (DBmanager)super.getServletContext().getAttribute("DbManager");
             HtmlManager = (HtmlManager)super.getServletContext().getAttribute("HtmlManager");
             contextPath = this.getServletContext().getContextPath();
+            addProductPattern  = "addProduct";
             ResponsePattern = "response";
             CancelPattern = "cancel";
             ConfirmPattern="confirm";
@@ -109,6 +111,23 @@ public class SellerAddServlet extends HttpServlet {
         session.removeAttribute("order");
         }
         
+        else if(op.equals(addProductPattern)){
+        
+          String path = this.getServletContext().getRealPath("Images/"); 
+          File folder = new File(path);
+          File[] listOfFiles = folder.listFiles(); 
+                   
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();  
+            try{
+                HtmlManager.printSellerAddProductPage(out, category_list , listOfFiles);
+        } finally {            
+            out.close();
+        }
+        
+        
+        }
+    
     }
     
     

@@ -22,12 +22,22 @@ public class HtmlManager {
     private ServletContext context;
     private String contextPath;
     
+    /**
+     *
+     * @param context servletcontext
+     */
     public HtmlManager(ServletContext context)
     {
         this.context = context;
         this.contextPath = context.getContextPath();
     }
     
+    /**
+     * Stampa la pagine di login , se message non è null lo stampa 
+     * @param out PrintWriter
+     * @param message messaggio da stampare 
+     * @param type tipo di messaggio (-1 = errore else successo) 
+     */
     public void printLoginPage(PrintWriter out , String message , int type)
           {
            out.println("<!DOCTYPE HTML>");   
@@ -92,6 +102,13 @@ public class HtmlManager {
 
           }
     
+    /**
+     * Stampa la pagina di errore , dopo 5 secondi ce redirect
+     * @param out PrintWriter
+     * @param message eventuale messaggio da stampare
+     * @param redirectURL url dove ridirezionare
+     * @param contextPath contextPath (essendo static non posso usare quello delo classe)
+     */
     static public void printErrorPage(PrintWriter out, String message , String redirectURL , String contextPath) //String message
     {
     out.println("<!DOCTYPE HTML>");       
@@ -125,6 +142,11 @@ public class HtmlManager {
 
     }
     
+    /**
+     * Stampa la pagina home del buyer.
+     * @param out
+     * @param category_list
+     */
     public void printBuyerHomePage(PrintWriter out, ArrayList category_list)
     {
     out.println("<!DOCTYPE html>");
@@ -152,6 +174,13 @@ public class HtmlManager {
     
     }
     
+    /**
+     * Stampa la pagine dei prodotti di una categoria
+     * @param out
+     * @param category_list 
+     * @param products_list lista dei prodotti da stampare
+     * @param category_id id della categoria.
+     */
     public void printBuyerProdcutsPage(PrintWriter out, ArrayList category_list , ArrayList products_list , int category_id)
     {
     
@@ -179,7 +208,14 @@ public class HtmlManager {
             out.println("<td><a href=\"BuyerOrderController?op=request&product=" + tmp.getProduct_id() + "\">"
                     + "<h5>"+ tmp.getProduct_name() +"</h5>"
                     + "</a><strong>Prezzo : <span style=\"color:red\">" + tmp.getPrice() + "</span></strong>$");
-            out.println("<br><strong>Disponibilità : </strong>" + tmp.getQuantity() +" " + tmp.getUm());
+            if(tmp.getQuantity() == 0)
+                {
+                out.println("<br><strong>Disponibilità : </strong><span class=\"text-error\">Non disponibile</span>");    
+                }
+            else
+                {
+                out.println("<br><strong>Disponibilità : </strong>" + tmp.getQuantity() +" " + tmp.getUm());
+                }
             out.println("<br><p> <small> "+tmp.getDescription() +" </small></p>");
             }     
     out.println("           </tbody> </table> </div> </div> </div>");
@@ -188,6 +224,14 @@ public class HtmlManager {
     }
     
     
+    /**
+     * Stampa la pagina con la lista degli ordini effettuati del buyer
+     * @param out
+     * @param category_list
+     * @param orders_list lista degli ordini da stampare
+     * @param message messaggio da stampare
+     * @param type  tipo del messaggio (-1 = errore , 1 = successo)
+     */
     public void printBuyerOrdersPage(PrintWriter out, ArrayList category_list , ArrayList orders_list , String message , int type)
     {
     out.println("<!DOCTYPE html>");
@@ -248,6 +292,12 @@ public class HtmlManager {
       
     }
     
+    /**
+     * Stampa la pagine di richiesta di un ordine , javascript esegue il controllo della quntità e aggiorna il prezzo
+     * @param out
+     * @param category_list
+     * @param product prodotto da comprare
+     */
     public void printBuyerOrderRequestPage(PrintWriter out , ArrayList category_list , Product product)
     {
     out.println("<!DOCTYPE html>");
@@ -311,6 +361,12 @@ public class HtmlManager {
        out.println("</html>"); 
     }
     
+    /**
+     * Stampa il riepilogo dell'ordine
+     * @param out
+     * @param category_list
+     * @param product
+     */
     public void printBuyerOrderConfirmPage(PrintWriter out , ArrayList category_list ,Product product)
     {
     out.println("<!DOCTYPE html>");
@@ -346,7 +402,11 @@ public class HtmlManager {
     }
     
        
-    //Questo stampa solo l'header
+    /**
+     * Stampa l'header e il menu a sinistra per le pagine del buyer
+     * @param out
+     * @param category_list
+     */
     private void printPageHeader(PrintWriter out , ArrayList category_list)
     {
     out.println("   <div class=\"row-fluid\">");
@@ -372,7 +432,12 @@ public class HtmlManager {
     out.println("		</ul></div>");
     }
        
-    //Questo ritorna il nome della categoria del prodotto
+    /**
+     * Stampa l'header e il menu a sinistra per le pagine del buyer
+     * @param out
+     * @param category_list
+     * @return il nome della categoria associata all'id
+     */
     private String printProductPageHeader(PrintWriter out , ArrayList category_list, int category_id)
     {
     out.println("   <div class=\"row-fluid\">");
@@ -403,7 +468,11 @@ public class HtmlManager {
         return result;
     }
     
-    //Header per il seller 
+    /**
+     * Stampa l'header e il menu a sinistra per le pagine del buyer
+     * @param out
+     * @param category_list
+     */
     private void printPageHeaderSeller(PrintWriter out , ArrayList category_list)
     {
     out.println("   <div class=\"row-fluid\">");
@@ -418,7 +487,7 @@ public class HtmlManager {
     out.println("                   <li  ><a href=\"SellerController?op=home\">Home</a></li>");
     out.println("                   <li class=\"nav-header\">Il mio account</li>");
     out.println("                   <li><a href=\"SellerController?op=myStore\">I miei prodotti</a></li>");
-    out.println("                   <li><a href=\"SellerController?op=addProduct\">Aggiungi prodotto</a></li>");
+    out.println("                   <li><a href=\"SellerAddController?op=addProduct\">Aggiungi prodotto</a></li>");
     out.println("                   <li><a href=\"" + contextPath + "/LoginController?op=logout\">Logout</a></li>");
     out.println("                   <li class=\"nav-header\">Categorie</li>");
     Iterator iter = category_list.iterator();
@@ -430,7 +499,12 @@ public class HtmlManager {
     out.println("		</ul></div>");
     }
     
-    //Header per il seller che come per il buyer ritorna il nome della categoria
+    /**
+     * Stampa l'header e il menu a sinistra per le pagine del seller
+     * @param out
+     * @param category_list
+     * @return il nome della categoria associata all'id
+     */
     private String printProductPageHeaderSeller(PrintWriter out , ArrayList category_list, int category_id)
     {
     out.println("   <div class=\"row-fluid\">");
@@ -445,7 +519,7 @@ public class HtmlManager {
     out.println("                   <li  ><a href=\"SellerController?op=home\">Home</a></li>");
     out.println("                   <li class=\"nav-header\">Il mio account</li>");
     out.println("                   <li><a href=\"SellerController?op=myStore\">I miei prodotti</a></li>");
-    out.println("                   <li><a href=\"SellerController?op=addProduct\">Aggiungi prodotto</a></li>");
+    out.println("                   <li><a href=\"SellerAddController?op=addProduct\">Aggiungi prodotto</a></li>");
     out.println("                   <li><a href=\"" + contextPath + "/LoginController?op=logout\">Logout</a></li>");
     out.println("                   <li class=\"nav-header\">Categorie</li>");
     Iterator iter = category_list.iterator();
@@ -462,6 +536,12 @@ public class HtmlManager {
         return result;
     }
     
+    /**
+     * Stampa la pagina home del seller con tutti i suoi ordini ricevuti
+     * @param out
+     * @param category_list
+     * @param sell_order_list
+     */
     public void printSellerHomePage(PrintWriter out, ArrayList category_list, ArrayList sell_order_list)
     {
     out.println("<!DOCTYPE html>");
@@ -506,6 +586,14 @@ public class HtmlManager {
     }
     
     
+    /**
+     * Stampa la pagina del seller con tutti i suoi prodotti in vendita
+     * @param out
+     * @param category_list
+     * @param sell_list
+     * @param message
+     * @param type
+     */
     public void printSellerStorePage(PrintWriter out, ArrayList category_list, ArrayList sell_list  , String message , int type){
     out.println("<!DOCTYPE html>");
     out.println("<html><head>");
@@ -566,6 +654,13 @@ public class HtmlManager {
     }
     
     
+    /**
+     * Stampa la pagina prodotti per una categoria per il seller
+     * @param out
+     * @param category_list
+     * @param products_list
+     * @param category_id
+     */
     public void printSellerProductsPage(PrintWriter out, ArrayList category_list , ArrayList products_list , int category_id)
     {
     
@@ -594,7 +689,14 @@ public class HtmlManager {
             out.println("<td>"
                     + "<h5>"+ tmp.getProduct_name() +"</h5>"
                     + "</a><strong>Prezzo : <span style=\"color:red\">" + tmp.getPrice() + "</span></strong>$");
-            out.println("<br><strong>Disponibilità : </strong>" + tmp.getQuantity() +" " + tmp.getUm());
+            if(tmp.getQuantity() == 0)
+                {
+                out.println("<br><strong>Disponibilità : </strong><span class=\"text-error\">Non disponibile</span>");    
+                }
+            else
+                {
+                out.println("<br><strong>Disponibilità : </strong>" + tmp.getQuantity() +" " + tmp.getUm());
+                }
             out.println("<br><p> <small> "+tmp.getDescription() +" </small></p>");
             }     
     out.println("           </tbody> </table> </div> </div> </div>");
@@ -603,6 +705,14 @@ public class HtmlManager {
     }
     
  
+    /**
+     * Stampa la pagina di aggiunto un nuovo prodotto
+     * La pagina è organizzata in due div: il primo contiene il form , il 2 le immagini da scegliere.
+     * Tramite funzione javascript e jquery scelgo il div da vedere e controllo l'input
+     * @param out
+     * @param category_list
+     * @param listOfFiles lista delle immagini presenti nella cartella images
+     */
     public void printSellerAddProductPage(PrintWriter out,  ArrayList category_list , File[] listOfFiles){
     out.println("<!DOCTYPE html>");
     out.println("<html><head>");
@@ -618,7 +728,7 @@ public class HtmlManager {
     out.println("   return false;});");
     out.println("    });");
     out.println("function changeImage(image_name){");
-    out.println("   document.getElementById(\"image_preview\").src = '/PrimoProgetto/Images/' + image_name;");
+    out.println("   document.getElementById(\"image_preview\").src = '"+contextPath+"/Images/' + image_name;");
     out.println("   document.getElementById(\"image_name\").value = image_name;");
     out.println("       $(function() {");
     out.println("           $(\"#image_div\").hide();");
@@ -735,7 +845,13 @@ public class HtmlManager {
     }
     
 
-public void printSellerAddConfirmPage(PrintWriter out , ArrayList category_list, Product product)
+    /**
+     * Stampa il riepilogo del prodotto immesso
+     * @param out
+     * @param category_list
+     * @param product
+     */
+    public void printSellerAddConfirmPage(PrintWriter out , ArrayList category_list, Product product)
     {
     out.println("<!DOCTYPE html>");
     out.println("<html><head>");

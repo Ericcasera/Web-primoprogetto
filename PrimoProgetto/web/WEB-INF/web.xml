@@ -69,10 +69,6 @@
         <servlet-class>Servlets.BuyerOrderServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ShowImage</servlet-name>
-        <servlet-class>Servlets.ShowImage</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>SellerAddServlet</servlet-name>
         <servlet-class>Servlets.SellerAddServlet</servlet-class>
     </servlet>
@@ -95,10 +91,6 @@
     <servlet-mapping>
         <servlet-name>BuyerBuyOrder</servlet-name>
         <url-pattern>/Buyer/BuyerOrderController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ShowImage</servlet-name>
-        <url-pattern>/ShowImage</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
